@@ -1,8 +1,8 @@
-import { Libre_Baskerville, Space_Mono } from "next/font/google";
+import { Italiana, Space_Mono } from "next/font/google";
 
-const display = Libre_Baskerville({
+const display = Italiana({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400"],
 });
 
 const mono = Space_Mono({
@@ -15,13 +15,33 @@ export default function Home() {
     <div
       className={`${display.className} min-h-screen scroll-smooth bg-[#f6f2ea] text-[#1a1714] [--paper:#f6f2ea] [--ink:#1a1714] [--accent:#8b5e3c] [--line:#1a1714]`}
     >
+      <style jsx global>{`
+        html {
+          scroll-behavior: smooth;
+        }
+        @keyframes floaty {
+          0% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-6px);
+          }
+          100% {
+            transform: translateY(0);
+          }
+        }
+        .floaty {
+          animation: floaty 9s ease-in-out infinite;
+          will-change: transform;
+        }
+      `}</style>
       <main className="mx-auto max-w-4xl px-6 pb-24 sm:px-10">
         <section
           id="top"
           className="relative flex h-screen min-h-screen flex-col justify-center gap-8 border-b border-[color:var(--line)]/15 py-14"
         >
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_#ffffff_0%,_var(--paper)_48%,_#efe6da_100%)]" />
-          <div className="space-y-4">
+          <div className="floaty space-y-4">
             <p className={`${mono.className} text-xs uppercase tracking-[0.5em] text-[color:var(--ink)]/60`}>
               Dennis & Filippa
             </p>
