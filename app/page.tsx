@@ -1,131 +1,108 @@
-import { Gloock, Sora } from "next/font/google";
+import { Libre_Baskerville, Space_Mono } from "next/font/google";
 
-const display = Gloock({
+const display = Libre_Baskerville({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "700"],
 });
 
-const body = Sora({
+const mono = Space_Mono({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "700"],
 });
 
 export default function Home() {
   return (
     <div
-      className={`${body.className} min-h-screen bg-[#efe9e2] text-[#181411] [--paper:#efe9e2] [--ink:#181411] [--clay:#b06f59] [--moss:#6b7b6b]`}
+      className={`${display.className} min-h-screen scroll-smooth bg-[#f6f2ea] text-[#1a1714] [--paper:#f6f2ea] [--ink:#1a1714] [--accent:#8b5e3c] [--line:#1a1714]`}
     >
-      <main className="mx-auto max-w-6xl px-6 pb-24 pt-14 sm:px-12">
-        <section className="grid gap-10 border-b border-black/10 pb-12 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <p className="text-[10px] uppercase tracking-[0.5em] text-black/50">Dennis & Filippa</p>
-              <h1 className={`${display.className} text-5xl leading-tight sm:text-6xl`}>
-                En dag att minnas
-              </h1>
-              <p className="max-w-md text-base leading-7 text-black/70">
-                Vigsel i Kungsholmens kyrka och middag pa Langangens gard. En lugn dag med er vi tycker om.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <span className="rounded-full border border-black/20 bg-white/70 px-4 py-2 text-xs uppercase tracking-[0.3em] text-black/60">
-                24 Augusti 2025
-              </span>
-              <span className="rounded-full border border-black/20 bg-white/70 px-4 py-2 text-xs uppercase tracking-[0.3em] text-black/60">
-                Stockholm
-              </span>
-            </div>
-            <div className="rounded-3xl border border-black/10 bg-white/80 p-6">
-              <p className="text-xs uppercase tracking-[0.4em] text-black/50">Snabba fakta</p>
-              <div className="mt-6 grid gap-6 sm:grid-cols-2">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-black/50">Vigsel</p>
-                  <p className="mt-2 text-sm text-black/70">Kungsholmens kyrka</p>
-                  <p className="text-sm text-black/70">15:00</p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-black/50">Middag</p>
-                  <p className="mt-2 text-sm text-black/70">Langangens gard</p>
-                  <p className="text-sm text-black/70">17:30</p>
-                </div>
-              </div>
-            </div>
+      <main className="mx-auto max-w-4xl px-6 pb-24 sm:px-10">
+        <section
+          id="top"
+          className="relative flex h-screen min-h-screen flex-col justify-center gap-8 border-b border-[color:var(--line)]/15 py-14"
+        >
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_#ffffff_0%,_var(--paper)_48%,_#efe6da_100%)]" />
+          <div className="space-y-4">
+            <p className={`${mono.className} text-xs uppercase tracking-[0.5em] text-[color:var(--ink)]/60`}>
+              Dennis & Filippa
+            </p>
+            <h1 className="text-4xl leading-tight sm:text-6xl">Välkommen till vår dag</h1>
+            <p className="max-w-xl text-base leading-7 text-[color:var(--ink)]/80">
+              En enkel, varm och gammaldags hemsida. Här finns allt du behöver för att hitta rätt
+              och komma i tid.
+            </p>
           </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            {["Bild 01", "Bild 02", "Bild 03", "Bild 04"].map((label, index) => (
-              <div
-                key={label}
-                className={`flex aspect-[4/3] items-center justify-center rounded-3xl border border-dashed border-black/20 bg-white/80 text-xs uppercase tracking-[0.35em] text-black/40 ${
-                  index === 1 ? "sm:row-span-2 sm:aspect-auto" : ""
-                }`}
+          <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.3em] text-[color:var(--ink)]/60">
+            <span className="border border-[color:var(--line)]/30 bg-white/80 px-4 py-2">24 Augusti 2025</span>
+            <span className="border border-[color:var(--line)]/30 bg-white/80 px-4 py-2">Stockholm</span>
+          </div>
+          <div className="flex flex-wrap gap-4">
+            {[
+              { label: "Tider", href: "#tider" },
+              { label: "Toastmasters", href: "#toastmasters" },
+              { label: "OSA", href: "#osa" },
+            ].map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className={`${mono.className} border border-[color:var(--line)]/40 bg-white px-5 py-3 text-xs uppercase tracking-[0.35em] text-[color:var(--ink)] transition hover:bg-[color:var(--paper)]`}
               >
-                {label}
-              </div>
+                {link.label}
+              </a>
             ))}
           </div>
         </section>
 
-        <section className="grid gap-12 border-b border-black/10 py-14 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="space-y-6">
-            <h2 className={`${display.className} text-3xl`}>Planen</h2>
-            <p className="text-base leading-7 text-black/70">
-              Dagen halls enkel. Exakta tider och detaljer skickas ut narmare datumet.
-            </p>
-            <div className="space-y-4">
-              {[
-                { label: "14:30", text: "Samling vid kyrkan" },
-                { label: "15:00", text: "Vigsel" },
-                { label: "17:30", text: "Middag pa garden" },
-                { label: "20:00", text: "Dans och bar" },
-              ].map((item) => (
-                <div key={item.label} className="flex items-center justify-between rounded-2xl border border-black/10 bg-white/80 px-5 py-4">
-                  <span className="text-sm font-semibold text-[color:var(--clay)]">{item.label}</span>
-                  <span className="text-sm text-black/70">{item.text}</span>
-                </div>
-              ))}
-            </div>
+        <section id="tider" className="space-y-6 border-b border-[color:var(--line)]/15 py-16">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 className="text-2xl sm:text-3xl">Tider & plats</h2>
+            <span className={`${mono.className} text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60`}>
+              24/08/2025
+            </span>
           </div>
-          <div className="space-y-6">
-            <div className="rounded-3xl border border-black/10 bg-white/80 p-6">
-              <p className="text-xs uppercase tracking-[0.4em] text-black/50">OSA</p>
-              <p className="mt-4 text-sm text-black/70">Svara senast 1 juli 2025.</p>
-              <p className="text-sm text-black/70">rsvp@dennisfilippa.com</p>
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div className="space-y-3 border border-[color:var(--line)]/20 bg-white/80 p-5">
+              <p className={`${mono.className} text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60`}>
+                Vigsel
+              </p>
+              <p className="text-base">14:00</p>
+              <p className="text-sm text-[color:var(--ink)]/70">Plats meddelas i inbjudan.</p>
             </div>
-            <div className="rounded-3xl border border-black/10 bg-white/80 p-6">
-              <p className="text-xs uppercase tracking-[0.4em] text-black/50">Praktiskt</p>
-              <div className="mt-4 space-y-3 text-sm text-black/70">
-                <p>Kladsel: uppklatt men bekvamt.</p>
-                <p>Tal: meddela oss i forvag.</p>
-                <p>Presenter: mer info senare.</p>
-              </div>
+            <div className="space-y-3 border border-[color:var(--line)]/20 bg-white/80 p-5">
+              <p className={`${mono.className} text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60`}>
+                Fest
+              </p>
+              <p className="text-base">16:30</p>
+              <p className="text-sm text-[color:var(--ink)]/70">Middag och firande efter vigseln.</p>
             </div>
           </div>
         </section>
 
-        <section className="grid gap-12 py-14 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="rounded-3xl border border-black/10 bg-[linear-gradient(135deg,_#ffffff,_var(--paper))] p-6">
-            <h2 className={`${display.className} text-3xl`}>Resa & boende</h2>
-            <p className="mt-4 text-base leading-7 text-black/70">
-              Tips pa hotell och transporter kommer. Det ar enkelt att ta sig mellan kyrkan och gardens festplats.
+        <section id="toastmasters" className="space-y-6 border-b border-[color:var(--line)]/15 py-16">
+          <h2 className="text-2xl sm:text-3xl">Toastmasters</h2>
+          <div className="border border-[color:var(--line)]/20 bg-white/80 p-5">
+            <p className="text-base">Karl Nygren och Ida Bjarke.</p>
+            <p className="mt-3 text-sm text-[color:var(--ink)]/70">
+              Hör gärna av er till dem om ni vill hålla tal eller göra något under kvällen.
             </p>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {["Karta", "Transport", "Boende", "Parkering"].map((label) => (
-                <div
-                  key={label}
-                  className="flex aspect-[4/3] items-center justify-center rounded-2xl border border-dashed border-black/20 bg-white/80 text-xs uppercase tracking-[0.35em] text-black/40"
-                >
-                  {label}
-                </div>
-              ))}
-            </div>
           </div>
-          <div className="rounded-3xl border border-black/10 bg-white/80 p-6">
-            <p className="text-xs uppercase tracking-[0.4em] text-black/50">Kontakt</p>
-            <p className="mt-4 text-sm text-black/70">For fragor om dagen, maila oss.</p>
-            <p className="mt-3 text-sm text-black/70">rsvp@dennisfilippa.com</p>
-            <div className="mt-8 border-t border-black/10 pt-6 text-xs uppercase tracking-[0.3em] text-black/40">
-              Fler detaljer kommer
+        </section>
+
+        <section id="osa" className="space-y-6 py-16">
+          <h2 className="text-2xl sm:text-3xl">OSA</h2>
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div className="border border-[color:var(--line)]/20 bg-white/80 p-5">
+              <p className={`${mono.className} text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60`}>
+                Sista datum
+              </p>
+              <p className="mt-2 text-base">1 maj</p>
+              <p className="text-sm text-[color:var(--ink)]/70">Tack för att ni svarar i tid.</p>
+            </div>
+            <div className="border border-[color:var(--line)]/20 bg-white/80 p-5">
+              <p className={`${mono.className} text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60`}>
+                Kontakt
+              </p>
+              <p className="mt-2 text-base">rsvp@dennisfilippa.com</p>
+              <p className="text-sm text-[color:var(--ink)]/70">Skriv gärna namn och antal.</p>
             </div>
           </div>
         </section>
