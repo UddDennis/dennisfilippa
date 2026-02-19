@@ -1,4 +1,7 @@
+"use client"; 
 import { Italiana, Space_Mono } from "next/font/google";
+import SmoothScrollLinks from "./components/SmoothScrollLinks";
+import {Row, Col, Button} from 'react-bootstrap';
 
 const display = Italiana({
   subsets: ["latin"],
@@ -15,26 +18,6 @@ export default function Home() {
     <div
       className={`${display.className} min-h-screen scroll-smooth bg-[#f6f2ea] text-[#1a1714] [--paper:#f6f2ea] [--ink:#1a1714] [--accent:#8b5e3c] [--line:#1a1714]`}
     >
-      <style jsx global>{`
-        html {
-          scroll-behavior: smooth;
-        }
-        @keyframes floaty {
-          0% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-6px);
-          }
-          100% {
-            transform: translateY(0);
-          }
-        }
-        .floaty {
-          animation: floaty 9s ease-in-out infinite;
-          will-change: transform;
-        }
-      `}</style>
       <main className="mx-auto max-w-4xl px-6 pb-24 sm:px-10">
         <section
           id="top"
@@ -42,33 +25,34 @@ export default function Home() {
         >
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_#ffffff_0%,_var(--paper)_48%,_#efe6da_100%)]" />
           <div className="floaty space-y-4">
-            <p className={`${mono.className} text-xs uppercase tracking-[0.5em] text-[color:var(--ink)]/60`}>
-              Dennis & Filippa
-            </p>
-            <h1 className="text-4xl leading-tight sm:text-6xl">Välkommen till vår dag</h1>
-            <p className="max-w-xl text-base leading-7 text-[color:var(--ink)]/80">
-              En enkel, varm och gammaldags hemsida. Här finns allt du behöver för att hitta rätt
-              och komma i tid.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3 text-xs uppercase tracking-[0.3em] text-[color:var(--ink)]/60">
-            <span className="border border-[color:var(--line)]/30 bg-white/80 px-4 py-2">24 Augusti 2025</span>
-            <span className="border border-[color:var(--line)]/30 bg-white/80 px-4 py-2">Stockholm</span>
-          </div>
-          <div className="flex flex-wrap gap-4">
-            {[
-              { label: "Tider", href: "#tider" },
-              { label: "Toastmasters", href: "#toastmasters" },
-              { label: "OSA", href: "#osa" },
-            ].map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className={`${mono.className} border border-[color:var(--line)]/40 bg-white px-5 py-3 text-xs uppercase tracking-[0.35em] text-[color:var(--ink)] transition hover:bg-[color:var(--paper)]`}
-              >
-                {link.label}
-              </a>
-            ))}
+          <Row>
+            <Col>
+            <h1 className="text-4xl leading-tight sm:text-6xl">Vi gifter oss!</h1>
+            </Col>
+            <Col>
+            <h1 className="text-4xl leading-tight sm:text-6xl">22 augusti</h1>
+            </Col>
+            <Col>
+            <h1 className="text-4xl leading-tight sm:text-6xl">2026</h1>
+            </Col>
+
+            <Button 
+              onClick={() => {
+                window.scrollTo({
+                  top: document.documentElement.scrollHeight,
+                  behavior: 'smooth'
+                })    
+              }}
+              style={{
+                color: "white",
+                background: "black",
+                borderColor: "white",
+                maxWidth: "120px"
+              }}
+            >
+              kom vettja
+            </Button>
+          </Row>
           </div>
         </section>
 
@@ -78,6 +62,7 @@ export default function Home() {
             <span className={`${mono.className} text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60`}>
               24/08/2025
             </span>
+
           </div>
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="space-y-3 border border-[color:var(--line)]/20 bg-white/80 p-5">
