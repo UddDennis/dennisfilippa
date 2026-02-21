@@ -1,6 +1,7 @@
 "use client"; 
 import { Italiana, Space_Mono } from "next/font/google";
-import SmoothScrollLinks from "./components/SmoothScrollLinks";
+import HighscoreGame from "./components/HighscoreGame";
+import RsvpForm from "./components/RsvpForm";
 import {Row, Col, Button} from 'react-bootstrap';
 
 const display = Italiana({
@@ -95,22 +96,26 @@ export default function Home() {
         <section id="osa" className="space-y-6 py-16">
           <h2 className="text-2xl sm:text-3xl">OSA</h2>
           <div className="grid gap-6 sm:grid-cols-2">
-            <div className="border border-[color:var(--line)]/20 bg-white/80 p-5">
+            <RsvpForm />
+            <div className="space-y-4 border border-[color:var(--line)]/20 bg-white/80 p-5">
+              <div>
               <p className={`${mono.className} text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60`}>
                 Sista datum
               </p>
               <p className="mt-2 text-base">1 maj</p>
               <p className="text-sm text-[color:var(--ink)]/70">Tack för att ni svarar i tid.</p>
-            </div>
-            <div className="border border-[color:var(--line)]/20 bg-white/80 p-5">
-              <p className={`${mono.className} text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60`}>
-                Kontakt
-              </p>
-              <p className="mt-2 text-base">rsvp@dennisfilippa.com</p>
-              <p className="text-sm text-[color:var(--ink)]/70">Skriv gärna namn och antal.</p>
+              </div>
+              <div>
+                <p className={`${mono.className} text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60`}>
+                  Kontakt
+                </p>
+                <p className="mt-2 text-base">rsvp@dennisfilippa.com</p>
+                <p className="text-sm text-[color:var(--ink)]/70">Skriv gärna om något strular i formuläret.</p>
+              </div>
             </div>
           </div>
         </section>
+        <HighscoreGame />
       </main>
     </div>
   );
