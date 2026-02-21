@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { neon } from "@neondatabase/serverless";
+import { neon, type NeonQueryFunction } from "@neondatabase/serverless";
 
 const DATABASE_URL = process.env.DATABASE_URL;
 
@@ -37,7 +37,9 @@ function cleanCanAttend(input: unknown) {
   return input;
 }
 
-async function ensureSchema(sql: ReturnType<typeof neon>) {
+async function ensureSchema<ArrayMode extends boolean, FullResults extends boolean>(
+  sql: NeonQueryFunction<ArrayMode, FullResults>,
+) {
   if (!schemaReadyPromise) {
     schemaReadyPromise = (async () => {
       await sql`
