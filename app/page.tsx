@@ -1,4 +1,5 @@
 "use client"; 
+import Link from "next/link";
 import { Italiana, Space_Mono } from "next/font/google";
 import HighscoreGame from "./components/HighscoreGame";
 import RsvpForm from "./components/RsvpForm";
@@ -54,6 +55,14 @@ export default function Home() {
               kom vettja
             </Button>
           </Row>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href="/brollopsjakten"
+              className="rounded border border-black bg-black px-4 py-2 text-sm font-semibold uppercase tracking-[0.4em] text-white transition hover:bg-[#2a2521]"
+            >
+              Spela bröllopsjakten nu
+            </Link>
+          </div>
           </div>
         </section>
 
