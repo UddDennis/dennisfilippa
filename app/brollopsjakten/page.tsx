@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import WeddingChase from "../components/WeddingChase";
 
 type ScoreEntry = {
@@ -73,10 +73,6 @@ export default function Brollopsjakten() {
       setIsSubmitting(false);
     }
   };
-
-  const todayFormatted = useMemo(() => {
-    return new Intl.DateTimeFormat("sv-SE", { dateStyle: "long" }).format(new Date());
-  }, []);
 
   return (
     <div className="min-h-screen bg-[#f6f2ea] text-[#1a1714]">
