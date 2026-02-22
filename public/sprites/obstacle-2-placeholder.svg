@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="Obstacle placeholder 2">
+  <rect width="96" height="96" rx="16" fill="#efe3f3"/>
+  <circle cx="48" cy="48" r="24" fill="#4b3f72"/>
+  <text x="48" y="88" text-anchor="middle" font-size="9" font-family="Arial, sans-serif" fill="#2c2550">OBSTACLE B</text>
+</svg>

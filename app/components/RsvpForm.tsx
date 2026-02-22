@@ -50,7 +50,7 @@ export default function RsvpForm() {
 
   return (
     <form onSubmit={submitRsvp} className="space-y-4 border border-[color:var(--line)]/20 bg-white/80 p-5">
-      <p className="text-base">OSA-formulär</p>
+      <p className="text-base">Formulär</p>
 
       <div className="space-y-2">
         <label htmlFor="rsvp-name" className="block text-sm text-[color:var(--ink)]/75">
@@ -64,7 +64,7 @@ export default function RsvpForm() {
           maxLength={80}
           required
           className="w-full border border-[color:var(--line)]/30 bg-white px-3 py-2 outline-none focus:border-black"
-          placeholder="Till exempel Dennis Svensson"
+          placeholder="T.ex. Dennis Udd"
         />
       </div>
 
@@ -78,7 +78,7 @@ export default function RsvpForm() {
               checked={canAttend === "yes"}
               onChange={() => setCanAttend("yes")}
             />
-            Ja, jag kommer
+              {" Ja, jag kommer"}
           </label>
           <label className="inline-flex items-center gap-2">
             <input
@@ -87,14 +87,14 @@ export default function RsvpForm() {
               checked={canAttend === "no"}
               onChange={() => setCanAttend("no")}
             />
-            Nej, jag kan inte
+           {" Nej, jag kan inte"}
           </label>
         </div>
       </div>
 
       <div className="space-y-2">
         <label htmlFor="rsvp-allergies" className="block text-sm text-[color:var(--ink)]/75">
-          Matallergier / specialkost (valfritt)
+          Allergier / specialkost (valfritt)
         </label>
         <textarea
           id="rsvp-allergies"
@@ -112,7 +112,7 @@ export default function RsvpForm() {
         disabled={isSubmitting}
         className="w-full border border-black bg-black px-4 py-2 text-white transition disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {isSubmitting ? "Sparar..." : "Skicka OSA"}
+        {isSubmitting ? "Sparar..." : "Skicka"}
       </button>
 
       {message ? <p className="text-sm text-[color:var(--ink)]/75">{message}</p> : null}

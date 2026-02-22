@@ -32,37 +32,29 @@ export default function Home() {
             <h1 className="text-4xl leading-tight sm:text-6xl">Vi gifter oss!</h1>
             </Col>
             <Col>
-            <h1 className="text-4xl leading-tight sm:text-6xl">22 augusti</h1>
-            </Col>
-            <Col>
-            <h1 className="text-4xl leading-tight sm:text-6xl">2026</h1>
+            <h1 className="text-4xl leading-tight sm:text-6xl">22 augusti 2026</h1>
             </Col>
 
-            <Button 
-              onClick={() => {
-                window.scrollTo({
-                  top: document.documentElement.scrollHeight,
-                  behavior: 'smooth'
-                })    
-              }}
-              style={{
-                color: "white",
-                background: "black",
-                borderColor: "white",
-                maxWidth: "120px"
-              }}
-            >
-              kom vettja
-            </Button>
+            <Col>
+              <Button 
+                onClick={() => {
+                  window.scrollTo({
+                    top: document.documentElement.scrollHeight,
+                    behavior: 'smooth'
+                  })    
+                }}
+                style={{
+                  color: "white",
+                  background: "black",
+                  borderColor: "white",
+                  maxWidth: "120px"
+                }}
+              >
+                kom vettja
+              </Button>
+             </Col>
           </Row>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Link
-              href="/brollopsjakten"
-              className="rounded border border-black bg-black px-4 py-2 text-sm font-semibold uppercase tracking-[0.4em] text-white transition hover:bg-[#2a2521]"
-            >
-              Spela bröllopsjakten nu
-            </Link>
-          </div>
+         
           </div>
         </section>
 
@@ -109,22 +101,24 @@ export default function Home() {
             <div className="space-y-4 border border-[color:var(--line)]/20 bg-white/80 p-5">
               <div>
               <p className={`${mono.className} text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60`}>
-                Sista datum
+                OSA senast
               </p>
               <p className="mt-2 text-base">1 maj</p>
-              <p className="text-sm text-[color:var(--ink)]/70">Tack för att ni svarar i tid.</p>
-              </div>
-              <div>
-                <p className={`${mono.className} text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60`}>
-                  Kontakt
-                </p>
-                <p className="mt-2 text-base">rsvp@dennisfilippa.com</p>
-                <p className="text-sm text-[color:var(--ink)]/70">Skriv gärna om något strular i formuläret.</p>
+              {/* <p className="text-sm text-[color:var(--ink)]/70">Tack för att ni svarar i tid.</p> */}
+              <p className="text-sm text-[color:var(--ink)]/70">{"Man får självklart OSA direkt till oss på valfritt sätt, eller höra av sig om man har några som helst frågor <3"} </p>
+
               </div>
             </div>
           </div>
         </section>
-        <HighscoreGame />
+         <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href="/brollopsjakten"
+              className="rounded border border-black bg-black px-4 py-2 text-sm font-semibold uppercase tracking-[0.4em] text-white transition hover:bg-[#2a2521]"
+            >
+              Spela bröllopsjakten nu
+            </Link>
+          </div>
       </main>
     </div>
   );

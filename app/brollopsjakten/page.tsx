@@ -85,17 +85,14 @@ export default function Brollopsjakten() {
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/"
-              className="text-xs uppercase tracking-[0.6em] text-[color:var(--ink)]/70"
+              className="text-xs  text-[color:var(--ink)]/70"
             >
               Tillbaka
             </Link>
-            <p className="text-sm text-[color:var(--ink)]/70">{todayFormatted}</p>
           </div>
           <h1 className="text-4xl font-light sm:text-5xl">Bröllopsjakten</h1>
           <p className="max-w-2xl text-base text-[color:var(--ink)]/70">
-            Hjälp paret ta sig fram på bröllopsstigen. Flytta åt vänster och höger, undvik hinder och
-            samla poäng så länge du kan. Spelet fortsätter tills ni krockar, men ni kan skicka in er bästa
-            räddning efteråt.
+            Dennis och Filippa ska gifta sig, men det verkar vara stökigt i kyrkan. Hjälp dem fram till altaret. 
           </p>
         </header>
 
