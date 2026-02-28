@@ -23,45 +23,45 @@ export default function Home() {
                   behavior: "smooth",
                 });
               }}
-              className="w-fit rounded border border-black bg-black px-5 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-[#2a2521] md:justify-self-end"
+              className="w-fit rounded border border-black bg-black px-5 py-2 text-sm font-semibold   text-white transition md:justify-self-end"
             >
-              kom vettja
+              Anmäl dig här
             </button>
           </div>
         </section>
 
         <section id="tider" className="space-y-6 border-b border-[color:var(--line)]/15 py-16">
           <div className="flex items-baseline justify-between gap-4">
-            <h2 className="text-2xl sm:text-3xl">Tider & plats</h2>
+            <h2 className="text-2xl sm:text-3xl">Tid & plats</h2>
             <span className="text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60">
-              24/08/2025
+              22/08/2026
             </span>
 
           </div>
           <div className="grid gap-6 sm:grid-cols-2">
-            <div className="space-y-3 border border-[color:var(--line)]/20 bg-white/80 p-5">
-              <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60">
+            <div className="space-y-3 border border-[color:var(--line)]/20 bg-white/40 p-5">
+              <p className=" uppercase  text-[color:var(--ink)]/60">
                 Vigsel
               </p>
               <p className="text-base">14:00</p>
-              <p className="text-sm text-[color:var(--ink)]/70">Plats meddelas i inbjudan.</p>
+              <p className="text-[color:var(--ink)]/70">Kungsholms kyrka.</p>
             </div>
-            <div className="space-y-3 border border-[color:var(--line)]/20 bg-white/80 p-5">
-              <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60">
-                Fest
+            <div className="space-y-3 border border-[color:var(--line)]/20 bg-white/40 p-5">
+              <p className=" uppercase  text-[color:var(--ink)]/60">
+                Middag + Fest
               </p>
               <p className="text-base">16:30</p>
-              <p className="text-sm text-[color:var(--ink)]/70">Middag och firande efter vigseln.</p>
+              <p className="text-[color:var(--ink)]/70">Fördrink och mingel på Långängens gård.</p>
             </div>
           </div>
         </section>
 
         <section id="toastmasters" className="space-y-6 border-b border-[color:var(--line)]/15 py-16">
           <h2 className="text-2xl sm:text-3xl">Toastmasters</h2>
-          <div className="border border-[color:var(--line)]/20 bg-white/80 p-5">
+          <div className="border border-[color:var(--line)]/20 bg-white/40 p-5">
             <p className="text-base">Karl Nygren och Ida Bjarke.</p>
-            <p className="mt-3 text-sm text-[color:var(--ink)]/70">
-              Hör gärna av er till dem om ni vill hålla tal eller göra något under kvällen.
+            <p className="mt-3 text-[color:var(--ink)]/70">
+              Hör av er till dem .
             </p>
           </div>
         </section>
@@ -70,9 +70,9 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl">OSA</h2>
           <div className="grid gap-6 sm:grid-cols-2">
             <RsvpForm />
-            <div className="space-y-4 border border-[color:var(--line)]/20 bg-white/80 p-5">
+            <div className="space-y-4 border border-[color:var(--line)]/20 bg-white/40 p-5">
               <div>
-              <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60">
+              <p className="text-xs uppercase  text-[color:var(--ink)]/60">
                 OSA senast
               </p>
               <p className="mt-2 text-base">1 maj</p>
@@ -86,7 +86,7 @@ export default function Home() {
          <div className="mt-4 flex flex-wrap gap-3">
             <Link
               href="/brollopsjakten"
-              className="rounded border border-black bg-black px-4 py-2 text-sm font-semibold uppercase tracking-[0.4em] text-white transition hover:bg-[#2a2521]"
+              className="rounded border border-black bg-black px-4 py-2 text-sm font-semibold text-white transition"
             >
               Spela bröllopsjakten nu
             </Link>

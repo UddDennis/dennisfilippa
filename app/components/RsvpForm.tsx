@@ -49,7 +49,7 @@ export default function RsvpForm() {
   };
 
   return (
-    <form onSubmit={submitRsvp} className="space-y-4 border border-[color:var(--line)]/20 bg-white/80 p-5">
+    <form onSubmit={submitRsvp} className="space-y-4 border border-[color:var(--line)]/20 bg-white/40 p-5">
       <p className="text-base">Formulär</p>
 
       <div className="space-y-2">
