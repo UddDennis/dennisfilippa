@@ -52,3 +52,94 @@ html {
   animation: floaty 9s ease-in-out infinite;
   will-change: transform;
 }
+
+@keyframes cardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heartPop {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.45);
+  }
+  18% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--heart-drift-x, 0px), calc(var(--heart-drift-y, 120px) * -1), 0)
+      scale(1.35);
+  }
+}
+
+.info-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in oklab, var(--line), white 80%);
+  background: linear-gradient(145deg, rgb(255 255 255 / 82%), rgb(255 255 255 / 48%));
+  box-shadow: 0 12px 28px -20px rgb(17 12 8 / 55%);
+  backdrop-filter: blur(4px);
+  transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+  animation: cardEntrance 420ms ease both;
+}
+
+.info-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgb(255 255 255 / 45%), transparent 40%);
+  opacity: 0;
+  transition: opacity 240ms ease;
+  pointer-events: none;
+}
+
+.info-card:hover,
+.info-card:focus-within {
+  transform: translateY(-3px);
+  border-color: color-mix(in oklab, var(--accent), white 62%);
+  box-shadow: 0 20px 45px -24px rgb(17 12 8 / 65%);
+}
+
+.info-card:hover::before,
+.info-card:focus-within::before {
+  opacity: 1;
+}
+
+.info-card-strong {
+  border-color: color-mix(in oklab, var(--accent), white 58%);
+  background: linear-gradient(145deg, rgb(255 255 255 / 90%), rgb(252 246 238 / 70%));
+}
+
+.heart-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.heart-particle {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.heart-glyph {
+  display: block;
+  line-height: 1;
+  filter: drop-shadow(0 3px 8px rgb(118 32 49 / 30%));
+  animation-name: heartPop;
+  animation-timing-function: cubic-bezier(0.22, 0.86, 0.24, 1);
+  animation-fill-mode: forwards;
+  will-change: transform, opacity;
+}

@@ -1,12 +1,14 @@
 "use client"; 
 import Link from "next/link";
 import RsvpForm from "./components/RsvpForm";
+import HeartsTrail from "./components/HeartsTrail";
 
 export default function Home() {
   return (
     <div
       className="min-h-screen scroll-smooth bg-[#f6f2ea] text-[#1a1714] [--paper:#f6f2ea] [--ink:#1a1714] [--accent:#8b5e3c] [--line:#1a1714]"
     >
+      <HeartsTrail />
       <main className="mx-auto max-w-6xl px-6 pb-24 sm:px-10">
         <section
           id="top"
@@ -39,14 +41,14 @@ export default function Home() {
 
           </div>
           <div className="grid gap-6 sm:grid-cols-2">
-            <div className="space-y-3 border border-[color:var(--line)]/20 bg-white/40 p-5">
+            <div className="info-card info-card-strong space-y-3 p-5">
               <p className=" uppercase  text-[color:var(--ink)]/60">
                 Vigsel
               </p>
               <p className="text-base">14:00</p>
               <p className="text-[color:var(--ink)]/70">Kungsholms kyrka.</p>
             </div>
-            <div className="space-y-3 border border-[color:var(--line)]/20 bg-white/40 p-5">
+            <div className="info-card info-card-strong space-y-3 p-5">
               <p className=" uppercase  text-[color:var(--ink)]/60">
                 Middag + Fest
               </p>
@@ -58,7 +60,7 @@ export default function Home() {
 
         <section id="toastmasters" className="space-y-6 border-b border-[color:var(--line)]/15 py-16">
           <h2 className="text-2xl sm:text-3xl">Toastmasters</h2>
-          <div className="border border-[color:var(--line)]/20 bg-white/40 p-5">
+          <div className="info-card info-card-strong p-5">
             <p className="text-base">Karl Nygren och Ida Bjarke.</p>
             <p className="mt-3 text-[color:var(--ink)]/70">
               Hör av er till dem .
@@ -70,7 +72,7 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl">OSA</h2>
           <div className="grid gap-6 sm:grid-cols-2">
             <RsvpForm />
-            <div className="space-y-4 border border-[color:var(--line)]/20 bg-white/40 p-5">
+            <div className="info-card space-y-4 p-5">
               <div>
               <p className="text-xs uppercase  text-[color:var(--ink)]/60">
                 OSA senast
@@ -86,7 +88,7 @@ export default function Home() {
          <div className="mt-4 flex flex-wrap gap-3">
             <Link
               href="/brollopsjakten"
-              className="rounded border border-black bg-black px-4 py-2 text-sm font-semibold text-white transition"
+              className="rounded-xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
             >
               Spela bröllopsjakten nu
             </Link>

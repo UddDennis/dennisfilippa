@@ -49,7 +49,7 @@ export default function RsvpForm() {
   };
 
   return (
-    <form onSubmit={submitRsvp} className="space-y-4 border border-[color:var(--line)]/20 bg-white/40 p-5">
+    <form onSubmit={submitRsvp} className="info-card space-y-4 p-5">
       <p className="text-base">Formulär</p>
 
       <div className="space-y-2">
@@ -63,7 +63,7 @@ export default function RsvpForm() {
           onChange={(event) => setFullName(event.target.value)}
           maxLength={80}
           required
-          className="w-full border border-[color:var(--line)]/30 bg-white px-3 py-2 outline-none focus:border-black"
+          className="w-full rounded-lg border border-[color:var(--line)]/30 bg-white/90 px-3 py-2 outline-none transition focus:border-black"
           placeholder="T.ex. Dennis Udd"
         />
       </div>
@@ -102,7 +102,7 @@ export default function RsvpForm() {
           onChange={(event) => setFoodAllergies(event.target.value)}
           maxLength={400}
           rows={3}
-          className="w-full border border-[color:var(--line)]/30 bg-white px-3 py-2 outline-none focus:border-black"
+          className="w-full rounded-lg border border-[color:var(--line)]/30 bg-white/90 px-3 py-2 outline-none transition focus:border-black"
           placeholder="Exempel: laktos, gluten..."
         />
       </div>
@@ -110,7 +110,7 @@ export default function RsvpForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full border border-black bg-black px-4 py-2 text-white transition disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full rounded-xl border border-black bg-black px-4 py-2 text-white transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? "Sparar..." : "Skicka"}
       </button>
