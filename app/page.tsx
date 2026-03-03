@@ -1,99 +1,222 @@
-"use client"; 
+"use client";
+
+import { CSSProperties, useEffect } from "react";
 import Link from "next/link";
+import Typography from "@mui/material/Typography";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import RsvpForm from "./components/RsvpForm";
 import HeartsTrail from "./components/HeartsTrail";
+import { useMediaQuery } from "@mui/material";
+
+const rootStyle = {
+  minHeight: "100vh",
+  backgroundColor: "#f6f2ea",
+  color: "#1a1714",
+  "--paper": "#f6f2ea",
+  "--ink": "#e25473",
+  "--accent": "#8b5e3c",
+  "--line": "#1a1714",
+} as CSSProperties;
+
+const mainTextColor = "#381010";
+
+const sectionDivider = { borderBottom: "1px solid rgb(26 23 20 / 15%)" };
 
 export default function Home() {
+  const isMobile = useMediaQuery('max-width:600px');
+
+  
+  const isMdUp = useMediaQuery("(min-width:768px)");
+  const tiderRowStyle = {
+    display: "flex",
+    flexDirection: isMdUp ? "row" : "column",
+    alignItems: isMdUp ? "center" : "flex-start",
+    justifyContent: "space-between",
+    gap: "1.5rem",
+    flexWrap: "wrap",
+  };
+  const textColStyle = {
+    flex: "1 1 0%",
+    minWidth: 0,
+  } as CSSProperties;
+  const placeholderColStyle = {
+    flex: "0 0 auto",
+  };
   return (
-    <div
-      className="min-h-screen scroll-smooth bg-[#f6f2ea] text-[#1a1714] [--paper:#f6f2ea] [--ink:#1a1714] [--accent:#8b5e3c] [--line:#1a1714]"
-    >
+    <Container fluid className="px-0" style={rootStyle}>
       <HeartsTrail />
-      <main className="mx-auto max-w-6xl px-6 pb-24 sm:px-10">
-        <section
+
+      <Container style={{ maxWidth: "72rem" }} className="px-4 px-sm-5 pb-5">
+        <Col
+          as="section"
           id="top"
-          className="relative flex h-screen min-h-screen flex-col justify-center gap-8 border-b border-[color:var(--line)]/15 py-14"
+          className="position-relative d-flex flex-column justify-content-center"
+          style={{
+            minHeight: "100vh",
+            gap: "2rem",
+            paddingTop: "3.5rem",
+            paddingBottom: "3.5rem",
+          }}
         >
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_#ffffff_0%,_var(--paper)_48%,_#efe6da_100%)]" />
-          <div className="floaty grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-center md:gap-6">
-            <h1 className="text-4xl leading-tight sm:text-6xl">Vi gifter oss!</h1>
-            <h1 className="text-4xl leading-tight sm:text-6xl">22 augusti 2026</h1>
-            <button
-              onClick={() => {
-                window.scrollTo({
-                  top: document.documentElement.scrollHeight,
-                  behavior: "smooth",
-                });
-              }}
-              className="w-fit rounded border border-black bg-black px-5 py-2 text-sm font-semibold   text-white transition md:justify-self-end"
-            >
-              Anmäl dig här
-            </button>
-          </div>
-        </section>
+          <Col
+            className="position-absolute top-0 start-0 w-100 h-100 p-0"
+            style={{
+              zIndex: -1,
+              background: "radial-gradient(circle at top, #ffffff 0%, var(--paper) 48%, #efe6da 100%)",
+            }}
+          />
 
-        <section id="tider" className="space-y-6 border-b border-[color:var(--line)]/15 py-16">
-          <div className="flex items-baseline justify-between gap-4">
-            <h2 className="text-2xl sm:text-3xl">Tid & plats</h2>
-            <span className="text-xs uppercase tracking-[0.4em] text-[color:var(--ink)]/60">
-              22/08/2026
-            </span>
 
-          </div>
-          <div className="grid gap-6 sm:grid-cols-2">
-            <div className="info-card info-card-strong space-y-3 p-5">
-              <p className=" uppercase  text-[color:var(--ink)]/60">
+          <Row className=" g-4" style={{alignContent: "center", justifyContent: "center", textAlign: "center"}}>
+              <Typography variant="h4" style={{fontFamily: "Didot", color: mainTextColor}}>22 augusti 2026</Typography>
+          </Row>
+          <Row className=" g-4" style={{alignContent: "center", justifyContent: "center", textAlign: "center"}}>
+            <Typography variant="h1" style={{fontFamily: "Didot" , color: mainTextColor, fontSize: isMobile ? "140px" : "60px"}}>Vi gifter oss!</Typography>
+          </Row>
+          <Row style={{alignContent: "center", justifyContent: "center"}}>
+              <Button
+                onClick={() => {
+                  window.scrollTo({
+                    top: document.documentElement.scrollHeight,
+                    behavior: "smooth",
+                  });
+                }}
+                style={{
+                  borderRadius: "4px",
+                  border: "0px solid black",
+                  backgroundColor: "#d64c63",
+                  color: "white",
+                  fontWeight: 600,
+                  fontFamily: "Didot",
+                  maxWidth: "150px",
+                  padding: "0.4rem 1.25rem",
+                }}
+              >
+                OSA här
+              </Button>
+          </Row>
+        </Col>
+
+        <Col id="tider" className="py-5">
+          <Row className="g-2 mb-3 align-items-baseline">
+            <Col>
+              <Typography variant="h2" style={{ fontFamily: "Didot", color: mainTextColor }}>
                 Vigsel
-              </p>
-              <p className="text-base">14:00</p>
-              <p className="text-[color:var(--ink)]/70">Kungsholms kyrka.</p>
-            </div>
-            <div className="info-card info-card-strong space-y-3 p-5">
-              <p className=" uppercase  text-[color:var(--ink)]/60">
-                Middag + Fest
-              </p>
-              <p className="text-base">16:30</p>
-              <p className="text-[color:var(--ink)]/70">Fördrink och mingel på Långängens gård.</p>
-            </div>
-          </div>
-        </section>
+              </Typography>
+            </Col>
+          </Row>
+          <Row className="g-4">
+            <Col md={6}>
+              <Col className=" h-100 p-4 d-flex flex-column gap-4">
+                <Row className="g-3 align-items-center flex-column flex-md-row"
+                    style={{display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start",}}>
+                  <Col style={{flex: "1 1 0%"}}>
+                    <Typography variant="subtitle1">14:00</Typography>
+                    <Typography variant="body2" sx={{ color: "rgb(26 23 20 / 70%)" }}>
+                      Kungsholms kyrka
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "rgb(26 23 20 / 70%)" }}>
+                      Ringklockor kl 14.00
+                    </Typography>
+                  </Col>
+                  <Col xs={12} sm={5} style={{flex: "0 0 auto"}}>
+                    <div className="tider-placeholder">Placeholder picture</div>
+                  </Col>
+                </Row>
+              </Col>
+            </Col>
+          </Row>
 
-        <section id="toastmasters" className="space-y-6 border-b border-[color:var(--line)]/15 py-16">
-          <h2 className="text-2xl sm:text-3xl">Toastmasters</h2>
-          <div className="info-card info-card-strong p-5">
-            <p className="text-base">Karl Nygren och Ida Bjarke.</p>
-            <p className="mt-3 text-[color:var(--ink)]/70">
-              Hör av er till dem .
-            </p>
-          </div>
-        </section>
+          
+        <Col id="tider" className="py-5">
+          <Row className="g-2 mb-3 align-items-baseline">
+            <Col style={{alignContent: "right", justifyContent: "right" , textAlign: "right"}}>
+              <Typography variant="h2" style={{ fontFamily: "Didot", color: mainTextColor }}>
+                Middag och fest
+              </Typography>
+            </Col>
+          </Row>
+          <Row className="g-4">
+            <Col md={6}>
+              <Col className=" h-100 p-4 d-flex flex-column gap-4">
+                <Row className="g-3 align-items-center flex-column flex-md-row">
+                  <Col xs={12} sm={5} className="order-md-1 order-2">
+                    <div className="tider-placeholder">Placeholder picture</div>
+                  </Col>
+                  <Col className="order-md-2 order-1">
+                    <Typography variant="subtitle1">16:30</Typography>
+                    <Typography variant="body2" sx={{ color: "rgb(26 23 20 / 70%)" }}>
+                      Långängens gård – fördrink och mingel.
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "rgb(26 23 20 / 70%)" }}>
+                      Band och dans hela natten.
+                    </Typography>
+                  </Col>
+                </Row>
+              </Col>
+            </Col>
+            </Row>
+        </Col>
+        </Col>
 
-        <section id="osa" className="space-y-6 py-16">
-          <h2 className="text-2xl sm:text-3xl">OSA</h2>
-          <div className="grid gap-6 sm:grid-cols-2">
-            <RsvpForm />
-            <div className="info-card space-y-4 p-5">
-              <div>
-              <p className="text-xs uppercase  text-[color:var(--ink)]/60">
-                OSA senast
-              </p>
-              <p className="mt-2 text-base">1 maj</p>
-              {/* <p className="text-sm text-[color:var(--ink)]/70">Tack för att ni svarar i tid.</p> */}
-              <p className="text-sm text-[color:var(--ink)]/70">{"Man får självklart OSA direkt till oss på valfritt sätt, eller höra av sig om man har några som helst frågor <3"} </p>
+        <Col as="section" id="toastmasters" className="py-5" style={sectionDivider}>
+          <Typography variant="h2" sx={{ marginBottom: "1.2rem" }}>
+            Toastmasters
+          </Typography>
+          <Col className="info-card info-card-strong p-4">
+            <Typography variant="subtitle1">Karl Nygren och Ida Bjarke.</Typography>
+            <Typography variant="body2" sx={{ color: "rgb(26 23 20 / 70%)", marginTop: "0.8rem" }}>
+              Hör av er till dem.
+            </Typography>
+          </Col>
+        </Col>
 
-              </div>
-            </div>
-          </div>
-        </section>
-         <div className="mt-4 flex flex-wrap gap-3">
+        <Col as="section" id="osa" className="py-5">
+          <Typography variant="h2" sx={{ marginBottom: "1.2rem" }}>
+            OSA
+          </Typography>
+
+          <Row className="g-4">
+            <Col sm={6}>
+              <RsvpForm />
+            </Col>
+            <Col sm={6}>
+              <Col className="info-card p-4 d-flex flex-column gap-3 h-100 justify-content-center">
+                <Typography variant="overline" sx={{ color: "rgb(26 23 20 / 60%)" }}>
+                  OSA senast
+                </Typography>
+                <Typography variant="subtitle1">1 maj</Typography>
+                <Typography variant="body2" sx={{ color: "rgb(26 23 20 / 70%)" }}>
+                  Man får självklart OSA direkt till oss på valfritt sätt, eller höra av sig om man
+                  har några som helst frågor.
+                </Typography>
+              </Col>
+            </Col>
+          </Row>
+        </Col>
+
+        <Row className="mt-2 g-3">
+          <Col xs="auto">
             <Link
               href="/brollopsjakten"
-              className="rounded-xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                border: "1px solid black",
+                backgroundColor: "black",
+                color: "white",
+                borderRadius: "0.75rem",
+                fontWeight: 600,
+                fontSize: "0.92rem",
+                padding: "0.62rem 1rem",
+                textDecoration: "none",
+              }}
             >
               Spela bröllopsjakten nu
             </Link>
-          </div>
-      </main>
-    </div>
+          </Col>
+        </Row>
+      </Container>
+    </Container>
   );
 }

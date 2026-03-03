@@ -1,6 +1,15 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { Button, Col, Form } from "react-bootstrap";
+import Typography from "@mui/material/Typography";
+
+const inputStyle = {
+  border: "1px solid rgb(26 23 20 / 30%)",
+  borderRadius: "0.5rem",
+  backgroundColor: "rgb(255 255 255 / 92%)",
+  padding: "0.55rem 0.8rem",
+};
 
 export default function RsvpForm() {
   const [fullName, setFullName] = useState("");
@@ -49,73 +58,84 @@ export default function RsvpForm() {
   };
 
   return (
-    <form onSubmit={submitRsvp} className="info-card space-y-4 p-5">
-      <p className="text-base">Formulär</p>
+    <Col as="form" onSubmit={submitRsvp} className="info-card h-100 d-flex flex-column gap-3 p-4">
+      <Typography variant="subtitle1">Formulär</Typography>
 
-      <div className="space-y-2">
-        <label htmlFor="rsvp-name" className="block text-sm text-[color:var(--ink)]/75">
+      <Form.Group controlId="rsvp-name">
+        <Form.Label style={{ color: "rgb(26 23 20 / 75%)", marginBottom: "0.35rem" }}>
           För- och efternamn
-        </label>
-        <input
-          id="rsvp-name"
+        </Form.Label>
+        <Form.Control
           type="text"
           value={fullName}
           onChange={(event) => setFullName(event.target.value)}
           maxLength={80}
           required
-          className="w-full rounded-lg border border-[color:var(--line)]/30 bg-white/90 px-3 py-2 outline-none transition focus:border-black"
+          style={inputStyle}
           placeholder="T.ex. Dennis Udd"
         />
-      </div>
+      </Form.Group>
 
-      <div className="space-y-2">
-        <p className="text-sm text-[color:var(--ink)]/75">Kan du komma?</p>
-        <div className="flex gap-4 text-sm">
-          <label className="inline-flex items-center gap-2">
-            <input
-              type="radio"
-              name="canAttend"
-              checked={canAttend === "yes"}
-              onChange={() => setCanAttend("yes")}
-            />
-              {" Ja, jag kommer"}
-          </label>
-          <label className="inline-flex items-center gap-2">
-            <input
-              type="radio"
-              name="canAttend"
-              checked={canAttend === "no"}
-              onChange={() => setCanAttend("no")}
-            />
-           {" Nej, jag kan inte"}
-          </label>
-        </div>
-      </div>
+      <Form.Group>
+        <Typography variant="body2" sx={{ color: "rgb(26 23 20 / 75%)", marginBottom: "0.35rem" }}>
+          Kan du komma?
+        </Typography>
+        <Col className="d-flex flex-wrap gap-4 p-0">
+          <Form.Check
+            inline
+            type="radio"
+            id="can-attend-yes"
+            label="Ja, jag kommer"
+            name="canAttend"
+            checked={canAttend === "yes"}
+            onChange={() => setCanAttend("yes")}
+          />
+          <Form.Check
+            inline
+            type="radio"
+            id="can-attend-no"
+            label="Nej, jag kan inte"
+            name="canAttend"
+            checked={canAttend === "no"}
+            onChange={() => setCanAttend("no")}
+          />
+        </Col>
+      </Form.Group>
 
-      <div className="space-y-2">
-        <label htmlFor="rsvp-allergies" className="block text-sm text-[color:var(--ink)]/75">
+      <Form.Group controlId="rsvp-allergies">
+        <Form.Label style={{ color: "rgb(26 23 20 / 75%)", marginBottom: "0.35rem" }}>
           Allergier / specialkost (valfritt)
-        </label>
-        <textarea
-          id="rsvp-allergies"
+        </Form.Label>
+        <Form.Control
+          as="textarea"
           value={foodAllergies}
           onChange={(event) => setFoodAllergies(event.target.value)}
           maxLength={400}
           rows={3}
-          className="w-full rounded-lg border border-[color:var(--line)]/30 bg-white/90 px-3 py-2 outline-none transition focus:border-black"
+          style={inputStyle}
           placeholder="Exempel: laktos, gluten..."
         />
-      </div>
+      </Form.Group>
 
-      <button
+      <Button
         type="submit"
         disabled={isSubmitting}
-        className="w-full rounded-xl border border-black bg-black px-4 py-2 text-white transition hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
+        style={{
+          border: "1px solid black",
+          backgroundColor: "black",
+          borderRadius: "0.75rem",
+          fontWeight: 600,
+          marginTop: "0.25rem",
+        }}
       >
         {isSubmitting ? "Sparar..." : "Skicka"}
-      </button>
+      </Button>
 
-      {message ? <p className="text-sm text-[color:var(--ink)]/75">{message}</p> : null}
-    </form>
+      {message ? (
+        <Typography variant="body2" sx={{ color: "rgb(26 23 20 / 75%)" }}>
+          {message}
+        </Typography>
+      ) : null}
+    </Col>
   );
 }
