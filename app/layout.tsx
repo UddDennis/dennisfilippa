@@ -5,6 +5,13 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Dennis och Filippas bröllop",
   description: "Dennis och Filippa ska gifta sig och du är bjuden",
+  openGraph: {
+    images: ["/puss2.svg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/puss2.svg"],
+  },
 };
 
 export default function RootLayout({

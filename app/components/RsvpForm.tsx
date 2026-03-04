@@ -3,17 +3,20 @@
 import { FormEvent, useState } from "react";
 import { Button, Col, Form } from "react-bootstrap";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box"
 
 const inputStyle = {
-  border: "1px solid rgb(26 23 20 / 30%)",
+  border: "0px solid rgb(26 23 20 / 30%)",
   borderRadius: "0.5rem",
   backgroundColor: "rgb(255 255 255 / 92%)",
   padding: "0.55rem 0.8rem",
 };
 
+const mainTextColor = "#381010";
+
 export default function RsvpForm() {
   const [fullName, setFullName] = useState("");
-  const [canAttend, setCanAttend] = useState<"yes" | "no">("yes");
+  const [canAttend, setCanAttend] = useState<boolean>(true);
   const [foodAllergies, setFoodAllergies] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -35,7 +38,7 @@ export default function RsvpForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fullName: fullName.trim(),
-          canAttend: canAttend === "yes",
+          canAttend: canAttend,
           foodAllergies: foodAllergies.trim(),
         }),
       });
@@ -49,7 +52,7 @@ export default function RsvpForm() {
       setMessage("Tack! Din OSA är sparad.");
       setFullName("");
       setFoodAllergies("");
-      setCanAttend("yes");
+      setCanAttend(true);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Något gick fel.");
     } finally {
@@ -59,10 +62,10 @@ export default function RsvpForm() {
 
   return (
     <Col as="form" onSubmit={submitRsvp} className="info-card h-100 d-flex flex-column gap-3 p-4">
-      <Typography variant="subtitle1">Formulär</Typography>
+
 
       <Form.Group controlId="rsvp-name">
-        <Form.Label style={{ color: "rgb(26 23 20 / 75%)", marginBottom: "0.35rem" }}>
+        <Form.Label style={{ fontFamily: "Didot", color: mainTextColor , marginBottom: "0.35rem" }}>
           För- och efternamn
         </Form.Label>
         <Form.Control
@@ -76,34 +79,105 @@ export default function RsvpForm() {
         />
       </Form.Group>
 
-      <Form.Group>
-        <Typography variant="body2" sx={{ color: "rgb(26 23 20 / 75%)", marginBottom: "0.35rem" }}>
+      <Form.Group>  
+        <Typography style={{ fontFamily: "Didot", color: mainTextColor , marginBottom: "0.35rem" }}>
           Kan du komma?
         </Typography>
-        <Col className="d-flex flex-wrap gap-4 p-0">
-          <Form.Check
-            inline
-            type="radio"
-            id="can-attend-yes"
-            label="Ja, jag kommer"
-            name="canAttend"
-            checked={canAttend === "yes"}
-            onChange={() => setCanAttend("yes")}
-          />
-          <Form.Check
-            inline
-            type="radio"
-            id="can-attend-no"
-            label="Nej, jag kan inte"
-            name="canAttend"
-            checked={canAttend === "no"}
-            onChange={() => setCanAttend("no")}
-          />
+        <Col className="d-flex flex-wrap gap-4 p-0 " style={{justifyContent: 'center'}}>
+      
+          <Box
+            sx={{
+                position: 'relative',
+                display: 'inline-flex',
+                borderRadius: '6px',
+                backgroundColor: "#fba2b1",
+                cursor: 'pointer',
+                maxHeight: '40px',
+                userSelect: 'none',
+                // maxWidth: '260px',
+                touchAction: 'manipulation',
+            }}
+        >
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: '0px',
+                    bottom: '0px',
+                    left: '0px',
+                    width: 'calc(50%)',
+                    borderRadius: '6px',
+                backgroundColor: "#d64c63",
+
+                    transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                    transform: !canAttend ? 'translateX(100%)' : 'translateX(0)',
+                    zIndex: 0,
+                }}
+            />
+            
+              <Box
+                  key={12}
+                  onPointerDown={(e) => {
+                      e.preventDefault();
+                      return setCanAttend(true);
+                  }}
+                  onClick={() => {
+                      return setCanAttend(true);
+                  }}
+                  sx={{
+                      position: 'relative',
+                      zIndex: 1,
+                      flex: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      px: 2,
+                      py: 1,
+                      fontWeight: 600,
+                      fontSize: '0.85rem',
+                      lineHeight: 1.2,
+                      color:  mainTextColor,
+                      transition: 'color 0.25s ease',
+                      whiteSpace: 'nowrap',
+                      // borderRadius: '2px',
+                  }}
+              >
+                  {"Jag kan komma "}
+              </Box>
+              <Box
+                  key={13}
+                  onPointerDown={(e) => {
+                      e.preventDefault();
+                      return setCanAttend(false);
+                  }}
+                  onClick={() => {
+                      return setCanAttend(false);
+                  }}
+                  sx={{
+                      position: 'relative',
+                      zIndex: 1,
+                      flex: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      px: 2,
+                      py: 1,
+                      fontWeight: 600,
+                      fontSize: '0.85rem',
+                      lineHeight: 1.2,
+                      color:  mainTextColor,
+                      transition: 'color 0.25s ease',
+                      whiteSpace: 'nowrap',
+                      // borderRadius: '2px',
+                  }}
+              >
+                  {"Jag kommer inte"}
+              </Box>
+        </Box>
         </Col>
       </Form.Group>
 
       <Form.Group controlId="rsvp-allergies">
-        <Form.Label style={{ color: "rgb(26 23 20 / 75%)", marginBottom: "0.35rem" }}>
+        <Form.Label style={{ fontFamily: "Didot", color: mainTextColor , marginBottom: "0.35rem" }}>
           Allergier / specialkost (valfritt)
         </Form.Label>
         <Form.Control
@@ -121,8 +195,8 @@ export default function RsvpForm() {
         type="submit"
         disabled={isSubmitting}
         style={{
-          border: "1px solid black",
-          backgroundColor: "black",
+          border: "0px solid black",
+          backgroundColor: "#d64c63",
           borderRadius: "0.75rem",
           fontWeight: 600,
           marginTop: "0.25rem",
