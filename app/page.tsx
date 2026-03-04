@@ -2,6 +2,7 @@
 
 import { CSSProperties, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Typography from "@mui/material/Typography";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import RsvpForm from "./components/RsvpForm";
@@ -23,7 +24,7 @@ const mainTextColor = "#381010";
 const sectionDivider = { borderBottom: "1px solid rgb(26 23 20 / 15%)" };
 
 export default function Home() {
-  const isMobile = useMediaQuery('max-width:600px');
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   
   const isMdUp = useMediaQuery("(min-width:768px)");
@@ -65,8 +66,27 @@ export default function Home() {
               background: "radial-gradient(circle at top, #ffffff 0%, var(--paper) 48%, #efe6da 100%)",
             }}
           />
-
-
+          <div
+            style={{
+              position: "absolute",
+              top: "1.25rem",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: isMobile ? "300px" : "420px",
+              zIndex: 1,
+              pointerEvents: "none",
+            }}
+          >
+            <Image
+              src="/Pussbild.svg"
+              alt="Pussbild"
+              width={788}
+              height={596}
+              sizes="(max-width: 600px) 300px, 420px"
+              style={{ width: "100%", height: "auto", display: "block" }}
+            />
+          </div>
+              
           <Row className=" g-4" style={{alignContent: "center", justifyContent: "center", textAlign: "center"}}>
               <Typography variant="h4" style={{fontFamily: "Didot", color: mainTextColor}}>22 augusti 2026</Typography>
           </Row>
