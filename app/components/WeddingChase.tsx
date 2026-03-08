@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 
 type GameState = "idle" | "running" | "over";
 
 type Obstacle = {
+  kind: "danger" | "bonus";
   x: number;
   y: number;
   width: number;
@@ -13,21 +14,161 @@ type Obstacle = {
   sprite: HTMLImageElement;
 };
 
+type PlayerPart = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+type Rect = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
 const CANVAS_WIDTH = 640;
 const CANVAS_HEIGHT = 480;
+const PLAYER_PART_WIDTH = 64;
+const PLAYER_PART_HEIGHT = 80;
+const PLAYER_PART_GAP = 10;
+const PLAYER_SWING_MAX_RAD = Math.PI / 18; // ~10deg
+const PLAYER_SWING_SPEED = 0.006;
+const OBSTACLE_SIZE = 56;
+const PLAYER_HITBOX_PAD_X = 5;
+const PLAYER_HITBOX_PAD_Y = 8;
+const OBSTACLE_HITBOX_PAD_X = 8;
+const OBSTACLE_HITBOX_PAD_Y = 8;
+const PLAYER_LEFT_SPRITE_PATH = "/sprites/filippa.png";
+const PLAYER_RIGHT_SPRITE_PATH = "/sprites/dennis.png";
+const BONUS_SPRITE_PATH = "/sprites/ring.png";
+const BONUS_SPAWN_CHANCE = 0.18;
 
-function intersects(a: { x: number; y: number; width: number; height: number }, b: Obstacle) {
-  const aLeft = a.x - a.width / 2;
-  const aTop = a.y - a.height / 2;
-  const aRight = aLeft + a.width;
-  const aBottom = aTop + a.height;
+const frameStyle: CSSProperties = {
+  width: "100%",
+  maxWidth: "640px",
+  margin: "0 auto",
+  overflow: "hidden",
+  border: "1px solid rgb(26 23 20 / 35%)",
+  borderRadius: 0,
+  backgroundColor: "#faf8f4",
+  position: "relative",
+};
+
+const scoreStyle: CSSProperties = {
+  pointerEvents: "none",
+  position: "absolute",
+  top: "0.75rem",
+  left: "0.75rem",
+  borderRadius: "0.4rem",
+  backgroundColor: "rgb(26 23 20 / 80%)",
+  color: "white",
+  fontSize: "0.72rem",
+  fontWeight: 600,
+  textTransform: "uppercase",
+  letterSpacing: "0.12em",
+  padding: "0.25rem 0.5rem",
+};
+
+const buttonStyle: CSSProperties = {
+  border: "0px solid transparent",
+  borderRadius: "0.5rem",
+  backgroundColor: "#d64c63",
+  color: "white",
+  fontWeight: 600,
+  fontSize: "0.92rem",
+  padding: "0.45rem 0.95rem",
+  transition: "background-color 160ms ease",
+  outline: "none",
+  WebkitTapHighlightColor: "transparent",
+};
+
+const messageStyle: CSSProperties = {
+  color: "rgb(26 23 20 / 70%)",
+  fontSize: "0.8rem",
+  margin: 0,
+};
+
+const buttonOverlayStyle: CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  pointerEvents: "none",
+};
+
+const rootStyle: CSSProperties = {
+  userSelect: "none",
+  WebkitUserSelect: "none",
+  WebkitTapHighlightColor: "transparent",
+};
+
+function insetRect(rect: Rect, padX: number, padY: number): Rect {
+  return {
+    x: rect.x + padX,
+    y: rect.y + padY,
+    width: Math.max(1, rect.width - padX * 2),
+    height: Math.max(1, rect.height - padY * 2),
+  };
+}
+
+function intersects(a: Rect, b: Rect) {
+  const aRight = a.x + a.width;
+  const aBottom = a.y + a.height;
 
   return (
-    aLeft < b.x + b.width &&
+    a.x < b.x + b.width &&
     aRight > b.x &&
-    aTop < b.y + b.height &&
+    a.y < b.y + b.height &&
     aBottom > b.y
   );
+}
+
+function getPlayerParts(player: { x: number; y: number }) {
+  const left: PlayerPart = {
+    x: player.x - PLAYER_PART_GAP / 2 - PLAYER_PART_WIDTH,
+    y: player.y - PLAYER_PART_HEIGHT / 2,
+    width: PLAYER_PART_WIDTH,
+    height: PLAYER_PART_HEIGHT,
+  };
+
+  const right: PlayerPart = {
+    x: player.x + PLAYER_PART_GAP / 2,
+    y: player.y - PLAYER_PART_HEIGHT / 2,
+    width: PLAYER_PART_WIDTH,
+    height: PLAYER_PART_HEIGHT,
+  };
+
+  return { left, right };
+}
+
+function drawRotatedSprite(
+  ctx: CanvasRenderingContext2D,
+  sprite: HTMLImageElement,
+  part: PlayerPart,
+  angleRad: number,
+) {
+  const centerX = part.x + part.width / 2;
+  const centerY = part.y + part.height / 2;
+
+  ctx.save();
+  ctx.translate(centerX, centerY);
+  ctx.rotate(angleRad);
+
+  if (sprite.complete && sprite.naturalWidth > 0) {
+    ctx.drawImage(sprite, -part.width / 2, -part.height / 2, part.width, part.height);
+  } else {
+    ctx.fillStyle = "#2f1d16";
+    ctx.fillRect(-part.width / 2, -part.height / 2, part.width, part.height);
+  }
+
+  ctx.restore();
+}
+
+function getDifficultyFactor(score: number) {
+  return Math.min(3, 1 + score * 0.04);
 }
 
 type Props = {
@@ -67,7 +208,7 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
     canvas.width = CANVAS_WIDTH;
     canvas.height = CANVAS_HEIGHT;
 
-    const player = { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT - 70, width: 64, height: 64 };
+    const player = { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT - 70 };
     const obstacles: Obstacle[] = [];
     const keys = { left: false, right: false };
     const touchKeys = { left: false, right: false };
@@ -78,43 +219,37 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
     let latestScore = 0;
     let running = true;
 
-    const playerSprite = new Image();
-    playerSprite.src = "/sprites/player-couple-placeholder.svg";
-    const obstacleSprites = [
-      "/sprites/obstacle-1-placeholder.svg",
-      "/sprites/obstacle-2-placeholder.svg",
-      "/sprites/obstacle-3-placeholder.svg",
+    const playerLeftSprite = new Image();
+    playerLeftSprite.src = PLAYER_LEFT_SPRITE_PATH;
+    const playerRightSprite = new Image();
+    playerRightSprite.src = PLAYER_RIGHT_SPRITE_PATH;
+    const dangerSprites = [
+      "/sprites/animal.png",
+      "/sprites/banana.png",
+      "/sprites/foot-ball.png",
+      "/sprites/wet-floor.png"
     ].map((src) => {
       const image = new Image();
       image.src = src;
       return image;
     });
+    const bonusSprite = new Image();
+    bonusSprite.src = BONUS_SPRITE_PATH;
 
-    const drawScene = () => {
-      ctx.fillStyle = "#f6f2ea";
+    const drawScene = (timeMs: number) => {
+      ctx.fillStyle = "#faf8f4";
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      ctx.fillStyle = "#d9c7b0";
-      ctx.fillRect(0, CANVAS_HEIGHT - 140, CANVAS_WIDTH, 140);
-
-      if (playerSprite.complete && playerSprite.naturalWidth > 0) {
-        ctx.drawImage(
-          playerSprite,
-          player.x - player.width / 2,
-          player.y - player.height / 2,
-          player.width,
-          player.height,
-        );
-      } else {
-        ctx.fillStyle = "#2f1d16";
-        ctx.fillRect(player.x - player.width / 2, player.y - player.height / 2, player.width, player.height);
-      }
+      const playerParts = getPlayerParts(player);
+      const swing = Math.sin(timeMs * PLAYER_SWING_SPEED) * PLAYER_SWING_MAX_RAD;
+      drawRotatedSprite(ctx, playerLeftSprite, playerParts.left, -swing);
+      drawRotatedSprite(ctx, playerRightSprite, playerParts.right, swing);
 
       obstacles.forEach((obstacle) => {
         if (obstacle.sprite.complete && obstacle.sprite.naturalWidth > 0) {
           ctx.drawImage(obstacle.sprite, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
         } else {
-          ctx.fillStyle = "#5d3426";
+          ctx.fillStyle = obstacle.kind === "bonus" ? "#d4a20b" : "#5d3426";
           ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
         }
       });
@@ -178,15 +313,19 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
     };
 
     const spawnObstacle = () => {
-      const width = 44 + Math.random() * 30;
-      const height = 44 + Math.random() * 30;
-      const sprite = obstacleSprites[Math.floor(Math.random() * obstacleSprites.length)];
+      const isBonus = Math.random() < BONUS_SPAWN_CHANCE;
+      const difficulty = getDifficultyFactor(latestScore);
+      const sprite = isBonus
+        ? bonusSprite
+        : dangerSprites[Math.floor(Math.random() * dangerSprites.length)];
+
       obstacles.push({
-        x: Math.random() * (CANVAS_WIDTH - width),
-        y: -height,
-        width,
-        height,
-        speed: 110 + Math.random() * 90,
+        kind: isBonus ? "bonus" : "danger",
+        x: Math.random() * (CANVAS_WIDTH - OBSTACLE_SIZE),
+        y: -OBSTACLE_SIZE,
+        width: OBSTACLE_SIZE,
+        height: OBSTACLE_SIZE,
+        speed: (110 + Math.random() * 90) * difficulty,
         sprite,
       });
     };
@@ -198,7 +337,7 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
 
       running = false;
       setGameState("over");
-      setMessage("Game over. Try again or submit your score.");
+      setMessage("Du förlorade tyvärr. Försök igen eller spara dina poäng");
       onFinish?.(latestScore);
     };
 
@@ -210,7 +349,9 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
       const delta = currentTime - lastTime;
       lastTime = currentTime;
 
-      if (currentTime - lastSpawn > 600 + Math.random() * 400) {
+      const spawnBase = Math.max(260, 680 - latestScore * 10);
+      const spawnJitter = Math.max(150, 450 - latestScore * 6);
+      if (currentTime - lastSpawn > spawnBase + Math.random() * spawnJitter) {
         spawnObstacle();
         lastSpawn = currentTime;
       }
@@ -223,16 +364,31 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
         const obstacle = obstacles[i];
         if (obstacle.y > CANVAS_HEIGHT) {
           obstacles.splice(i, 1);
-          latestScore += 1;
-          setScore(latestScore);
-          onScore?.(latestScore);
-        } else if (intersects(player, obstacle)) {
-          concludeGame();
-          break;
+          if (obstacle.kind === "danger") {
+            latestScore += 1;
+            setScore(latestScore);
+            onScore?.(latestScore);
+          }
+        } else {
+          const playerParts = getPlayerParts(player);
+          const obstacleHitbox = insetRect(obstacle, OBSTACLE_HITBOX_PAD_X, OBSTACLE_HITBOX_PAD_Y);
+          const leftHitbox = insetRect(playerParts.left, PLAYER_HITBOX_PAD_X, PLAYER_HITBOX_PAD_Y);
+          const rightHitbox = insetRect(playerParts.right, PLAYER_HITBOX_PAD_X, PLAYER_HITBOX_PAD_Y);
+          if (intersects(leftHitbox, obstacleHitbox) || intersects(rightHitbox, obstacleHitbox)) {
+            if (obstacle.kind === "bonus") {
+              obstacles.splice(i, 1);
+              latestScore += 5;
+              setScore(latestScore);
+              onScore?.(latestScore);
+            } else {
+              concludeGame();
+              break;
+            }
+          }
         }
       }
 
-      const moveSpeed = 220;
+      const moveSpeed = 300;
       let velocity = 0;
       if (keys.left || touchKeys.left) {
         velocity -= moveSpeed;
@@ -241,12 +397,13 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
         velocity += moveSpeed;
       }
 
+      const playerTotalWidth = PLAYER_PART_WIDTH * 2 + PLAYER_PART_GAP;
       player.x = Math.min(
-        Math.max(player.x + (velocity * delta) / 1000, player.width / 2),
-        CANVAS_WIDTH - player.width / 2,
+        Math.max(player.x + (velocity * delta) / 1000, playerTotalWidth / 2),
+        CANVAS_WIDTH - playerTotalWidth / 2,
       );
 
-      drawScene();
+      drawScene(currentTime);
       animationFrame = requestAnimationFrame(loop);
     };
 
@@ -272,23 +429,32 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
   }, [gameState, runId, onFinish, onScore]);
 
   return (
-    <div className="space-y-3">
-      <div className="relative mx-auto w-full max-w-[640px] overflow-hidden rounded border border-black/40 bg-[#f6f2ea]">
-        <canvas ref={canvasRef} className="block w-full touch-none" />
-        <div className="pointer-events-none absolute left-3 top-3 rounded bg-black/70 px-2 py-1 text-xs font-medium uppercase tracking-[0.15em] text-white">
-          Poäng: {score}
-        </div>
+    <div className="d-flex flex-column gap-3" style={rootStyle}>
+      <div style={frameStyle}>
+        <canvas ref={canvasRef} className="d-block w-100" style={{ touchAction: "none" }} />
+        <div style={scoreStyle}>Poäng: {score}</div>
+
+        {gameState !== "running" ? (
+          <div style={buttonOverlayStyle}>
+            <button
+              type="button"
+              onClick={startGame}
+              style={{ ...buttonStyle, pointerEvents: "auto" }}
+              onMouseDown={(event) => {
+                event.preventDefault();
+                event.currentTarget.blur();
+              }}
+              onPointerUp={(event) => {
+                event.currentTarget.blur();
+              }}
+            >
+              {gameState === "over" ? "Spela igen" : "Starta spel"}
+            </button>
+          </div>
+        ) : null}
       </div>
-      <div className="mx-auto flex w-full max-w-[640px] flex-col items-start gap-2">
-        <button
-          type="button"
-          onClick={startGame}
-          className="rounded border border-black bg-black px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#2a2521]"
-        >
-          {gameState === "running" ? "Startar..." : gameState === "over" ? "Spela igen" : "Spela bröllopsjakten nu"}
-        </button>
-        {message ? <p className="text-xs text-[color:var(--ink)]/70">{message}</p> : null}
-      </div>
+
+      {message ? <p style={messageStyle}>{message}</p> : null}
     </div>
   );
 }

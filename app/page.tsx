@@ -24,7 +24,9 @@ const mainTextColor = "#381010";
 const sectionDivider = { borderBottom: "1px solid rgb(26 23 20 / 15%)" };
 
 export default function Home() {
-  const isMobile = useMediaQuery("(max-width:600px)");
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const isMobileQuery = useMediaQuery("(max-width:600px)");
+  const isMobile = hasLoaded ? isMobileQuery : true;
   const karlPartRef = useRef<HTMLDivElement | null>(null);
   const idaPartRef = useRef<HTMLDivElement | null>(null);
   const [karlVisible, setKarlVisible] = useState(false);
@@ -73,14 +75,18 @@ export default function Home() {
       opacity: isVisible ? 1 : 0,
       willChange: "transform, opacity",
       transition: "transform 700ms cubic-bezier(0.22, 0.86, 0.24, 1), opacity 420ms ease",
-      left: side === "left" ? (isMobile ? "-1.1rem" : "-6.5rem") : undefined,
-      right: side === "right" ? (isMobile ? "-1.1rem" : "-4.5rem") : undefined,
+      left: side === "left" ? (isMobile ? "-0.7rem" : "14.5rem") : undefined,
+      right: side === "right" ? (isMobile ? "-0.7rem" : "10.5rem") : undefined,
       transform: isVisible
         ? "translateX(0)"
         : side === "left"
           ? "translateX(calc(-100vw - 8rem))"
           : "translateX(calc(100vw + 8rem))",
     }) as CSSProperties;
+
+  useEffect(() => {
+    setHasLoaded(true);
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -249,7 +255,7 @@ export default function Home() {
         <Col id="tider" className="py-5">
           <Row className="g-2 mb-3 align-items-baseline">
             <Col style={{alignContent: "right", justifyContent: "right" , textAlign: isMobile ? "center" : "right"}}>
-              <Typography variant="h2" style={{ fontFamily: "Didot", color: mainTextColor, fontSize: isMobile ? "46px" : "60px"}}>
+              <Typography variant="h2" style={{ fontFamily: "Didot", color: mainTextColor, fontSize: isMobile ? "46px" : "80px"}}>
                 Middag och fest
               </Typography>
             </Col>
@@ -289,56 +295,23 @@ export default function Home() {
         </Col>
         </Col>
 
-        <Col as="section" id="toastmasters" className="py-5" style={{}}>
+        <Col as="section" id="toastmasters" className="py-5 mt-5 mb-25" style={{}}>
           <Typography variant="h2" style={{ fontFamily: "Didot", color: mainTextColor, fontSize: isMobile ? "46px" : "60px"}}>
                 Toastmasters
           </Typography>
           <Row className="g-4 mt-1">
             <Col md={6}>
-              <div ref={karlPartRef} className="p-4 h-100" style={toastmasterPartStyle}>
-                <div
-                  style={getToastmasterImageStyle("left", karlVisible)}
-                >
-                  {/* <Image
-                    src="/cursors/karl-placeholder.svg"
-                    alt="Karl placeholder"
-                    width={90}
-                    height={90}
-                    style={toastmasterPortraitStyle}
-                  /> */}
-                </div>
-                <Typography
-                  variant="subtitle1"
-                  style={{
-                    display: "inline-block",
-                    width: "fit-content",
-                    fontFamily: "Didot",
-                    color: mainTextColor,
-                    fontSize: isMobile ? "24px" : "30px",
-                  }}
-                >
-                  Karl Nygren
-                </Typography>
-                <Typography variant="body2" sx={{fontFamily: "Didot", color: mainTextColor, marginTop: "0.65rem" }}>
-                  <a style={toastmasterLinkStyle}>Kal.nygren@gmail.com</a>
-                </Typography>
-                <Typography variant="body2" sx={{fontFamily: "Didot", color: mainTextColor, marginTop: "0.25rem" }}>
-                  <a style={toastmasterLinkStyle}>0700617107</a>
-                </Typography>
-              </div>
-            </Col>
-            <Col md={6}>
               <div ref={idaPartRef} className="p-4 h-100" style={toastmasterPartStyle}>
                 <div
-                  style={getToastmasterImageStyle("right", idaVisible)}
+                  style={getToastmasterImageStyle("left", idaVisible)}
                 >
-                  {/* <Image
-                    src="/cursors/ida-placeholder.svg"
+                  <Image
+                    src="/cursors/ida.jpg"
                     alt="Ida placeholder"
                     width={90}
                     height={90}
                     style={toastmasterPortraitStyle}
-                  /> */}
+                  />
                 </div>
                 <Typography
                   variant="subtitle1"
@@ -360,6 +333,40 @@ export default function Home() {
                 </Typography>
               </div>
             </Col>
+            <Col md={6}>
+              <div ref={karlPartRef} className="p-4 h-100" style={toastmasterPartStyle}>
+                <div
+                  style={getToastmasterImageStyle("right", karlVisible)}
+                >
+                  <Image
+                    src="/cursors/karl-bild.jpg"
+                    alt="Karl placeholder"
+                    width={90}
+                    height={90}
+                    style={toastmasterPortraitStyle}
+                  />
+                </div>
+                <Typography
+                  variant="subtitle1"
+                  style={{
+                    display: "inline-block",
+                    width: "fit-content",
+                    fontFamily: "Didot",
+                    color: mainTextColor,
+                    fontSize: isMobile ? "24px" : "30px",
+                  }}
+                >
+                  Karl Nygren
+                </Typography>
+                <Typography variant="body2" sx={{fontFamily: "Didot", color: mainTextColor, marginTop: "0.65rem" }}>
+                  <a style={toastmasterLinkStyle}>Kal.nygren@gmail.com</a>
+                </Typography>
+                <Typography variant="body2" sx={{fontFamily: "Didot", color: mainTextColor, marginTop: "0.25rem" }}>
+                  <a style={toastmasterLinkStyle}>0700617107</a>
+                </Typography>
+              </div>
+            </Col>
+            
           </Row>
         </Col>
 
