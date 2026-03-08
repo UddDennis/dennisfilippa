@@ -393,7 +393,7 @@ export default function Home() {
           </Row>
         </Col>
 
-        <Row className="mt-2 g-3">
+        <Row className="mt-2 g-3 " style={{justifyContent: 'center', textAlign: 'center'}}>
           <Col xs="auto">
             <Link
               href="/brollopsjakten"
@@ -410,7 +410,7 @@ export default function Home() {
                 textDecoration: "none",
               }}
             >
-              Spela ett spel
+              Spela Bröllopsjakten
             </Link>
           </Col>
         </Row>
