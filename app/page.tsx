@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, useEffect } from "react";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Typography from "@mui/material/Typography";
@@ -25,6 +25,10 @@ const sectionDivider = { borderBottom: "1px solid rgb(26 23 20 / 15%)" };
 
 export default function Home() {
   const isMobile = useMediaQuery("(max-width:600px)");
+  const karlPartRef = useRef<HTMLDivElement | null>(null);
+  const idaPartRef = useRef<HTMLDivElement | null>(null);
+  const [karlVisible, setKarlVisible] = useState(false);
+  const [idaVisible, setIdaVisible] = useState(false);
 
 
   const isMdUp = useMediaQuery("(min-width:768px)");
@@ -43,6 +47,73 @@ export default function Home() {
   const placeholderColStyle = {
     flex: "0 0 auto",
   };
+  const toastmasterPartStyle = {
+    position: "relative",
+    overflow: "visible",
+    // borderTop: "1px solid rgb(26 23 20 / 25%)",
+    // borderBottom: "1px solid rgb(26 23 20 / 25%)",
+    background: "transparent",
+  } as CSSProperties;
+  const toastmasterLinkStyle = {
+    color: mainTextColor,
+    textDecorationColor: "rgb(56 16 16 / 40%)",
+  } as CSSProperties;
+  const toastmasterPortraitStyle = {
+    width: isMobile ? "62px" : "84px",
+    height: isMobile ? "62px" : "84px",
+    borderRadius: "999px",
+    boxShadow: "0 10px 22px -14px rgb(17 12 8 / 70%)",
+    border: "1px solid rgb(56 16 16 / 25%)",
+  } as CSSProperties;
+  const getToastmasterImageStyle = (side: "left" | "right", isVisible: boolean) =>
+    ({
+      position: "absolute",
+      top: "0.8rem",
+      pointerEvents: "none",
+      opacity: isVisible ? 1 : 0,
+      willChange: "transform, opacity",
+      transition: "transform 700ms cubic-bezier(0.22, 0.86, 0.24, 1), opacity 420ms ease",
+      left: side === "left" ? (isMobile ? "-1.1rem" : "-6.5rem") : undefined,
+      right: side === "right" ? (isMobile ? "-1.1rem" : "-4.5rem") : undefined,
+      transform: isVisible
+        ? "translateX(0)"
+        : side === "left"
+          ? "translateX(calc(-100vw - 8rem))"
+          : "translateX(calc(100vw + 8rem))",
+    }) as CSSProperties;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!("IntersectionObserver" in globalThis)) {
+      globalThis.setTimeout(() => {
+        setKarlVisible(true);
+        setIdaVisible(true);
+      }, 0);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target === karlPartRef.current) {
+            requestAnimationFrame(() => setKarlVisible(entry.isIntersecting));
+          }
+          if (entry.target === idaPartRef.current) {
+            requestAnimationFrame(() => setIdaVisible(entry.isIntersecting));
+          }
+        });
+      },
+      { threshold: 0.05, rootMargin: "0px 0px 20% 0px" }
+    );
+
+    const karlNode = karlPartRef.current;
+    const idaNode = idaPartRef.current;
+    if (karlNode) observer.observe(karlNode);
+    if (idaNode) observer.observe(idaNode);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <Container fluid className="px-0" style={rootStyle}>
       <HeartsTrail />
@@ -125,7 +196,7 @@ export default function Home() {
         <Col id="tider" className="py-5">
           <Row className="g-2 mb-3 align-items-baseline">
             <Col>
-              <Typography variant="h2" style={{ fontFamily: "Didot", color: mainTextColor , fontSize: isMobile ? "44px" : "60px"}}>
+              <Typography variant="h2" style={{ fontFamily: "Didot", color: mainTextColor , fontSize: isMobile ? "46px" : "80px"}}>
                 Vigsel
               </Typography>
             </Col>
@@ -139,8 +210,8 @@ export default function Home() {
                 <Row className="g-3 align-items-center flex-column flex-md-row"
                     style={{display: "flex", justifyContent: "space-between", alignItems: isMobile ? "center" : "flex-start",}}>
                   <Col style={{flex: "1 1 0%"}}>
-                    <Typography variant="subtitle1" style={{ fontFamily: "Didot" }} >14:00</Typography>
-                    <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor }}>
+                    <Typography variant="subtitle1" style={{ fontFamily: "Didot", fontSize: isMobile ? "18px" : "26px" }} >14:00</Typography>
+                    <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor, fontSize: isMobile ? "16px" : "20px" }}>
                       Kungsholms kyrka
                     </Typography>
                     {/* <Typography variant="body2" sx={{ color: "rgb(26 23 20 / 70%)" }}>
@@ -178,7 +249,7 @@ export default function Home() {
         <Col id="tider" className="py-5">
           <Row className="g-2 mb-3 align-items-baseline">
             <Col style={{alignContent: "right", justifyContent: "right" , textAlign: isMobile ? "center" : "right"}}>
-              <Typography variant="h2" style={{ fontFamily: "Didot", color: mainTextColor, fontSize: isMobile ? "44px" : "60px"}}>
+              <Typography variant="h2" style={{ fontFamily: "Didot", color: mainTextColor, fontSize: isMobile ? "46px" : "60px"}}>
                 Middag och fest
               </Typography>
             </Col>
@@ -199,15 +270,15 @@ export default function Home() {
                     />
                   </Col>
                   <Col md="auto" className="order-md-2 order-1 ms-md-auto text-md-end">
-                    <Typography variant="subtitle1" style={{ fontFamily: "Didot" }}>16:30</Typography>
-                    <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor }}>
+                    <Typography variant="subtitle1" style={{ fontFamily: "Didot" , fontSize: isMobile ? "18px" : "26px"}}>16:30</Typography>
+                    <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor , fontSize: isMobile ? "16px" : "20px"}}>
                       Vi samlas på Långängens gård för en fördrink. Mer information kommer!
                       {/* <Link href={"https://maps.app.goo.gl/DGM5ERgLg4qTpQJ17"}>
                         Såhär hittar man hit
                       </Link> */}
                     </Typography>
-                    <Typography variant="subtitle1" style={{ fontFamily: "Didot" }}>18:00</Typography>
-                    <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor }}>
+                    <Typography variant="subtitle1" style={{ fontFamily: "Didot" , fontSize: isMobile ? "18px" : "26px"}}>18:00</Typography>
+                    <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor , fontSize: isMobile ? "16px" : "20px"}}>
                       Middag och efterföljande fest.
                     </Typography>
                   </Col>
@@ -218,16 +289,78 @@ export default function Home() {
         </Col>
         </Col>
 
-        <Col as="section" id="toastmasters" className="py-5" style={sectionDivider}>
-          <Typography variant="h2" style={{ fontFamily: "Didot", color: mainTextColor, fontSize: isMobile ? "44px" : "60px"}}>
+        <Col as="section" id="toastmasters" className="py-5" style={{}}>
+          <Typography variant="h2" style={{ fontFamily: "Didot", color: mainTextColor, fontSize: isMobile ? "46px" : "60px"}}>
                 Toastmasters
-            </Typography>
-          <Col className="info-card info-card-strong p-4">
-            <Typography variant="subtitle1">Karl Nygren och Ida Bjarke.</Typography>
-            <Typography variant="body2" sx={{ color: "rgb(26 23 20 / 70%)", marginTop: "0.8rem" }}>
-              Mer info kommer
-            </Typography>
-          </Col>
+          </Typography>
+          <Row className="g-4 mt-1">
+            <Col md={6}>
+              <div ref={karlPartRef} className="p-4 h-100" style={toastmasterPartStyle}>
+                <div
+                  style={getToastmasterImageStyle("left", karlVisible)}
+                >
+                  {/* <Image
+                    src="/cursors/karl-placeholder.svg"
+                    alt="Karl placeholder"
+                    width={90}
+                    height={90}
+                    style={toastmasterPortraitStyle}
+                  /> */}
+                </div>
+                <Typography
+                  variant="subtitle1"
+                  style={{
+                    display: "inline-block",
+                    width: "fit-content",
+                    fontFamily: "Didot",
+                    color: mainTextColor,
+                    fontSize: isMobile ? "24px" : "30px",
+                  }}
+                >
+                  Karl Nygren
+                </Typography>
+                <Typography variant="body2" sx={{fontFamily: "Didot", color: mainTextColor, marginTop: "0.65rem" }}>
+                  <a style={toastmasterLinkStyle}>Kal.nygren@gmail.com</a>
+                </Typography>
+                <Typography variant="body2" sx={{fontFamily: "Didot", color: mainTextColor, marginTop: "0.25rem" }}>
+                  <a style={toastmasterLinkStyle}>0700617107</a>
+                </Typography>
+              </div>
+            </Col>
+            <Col md={6}>
+              <div ref={idaPartRef} className="p-4 h-100" style={toastmasterPartStyle}>
+                <div
+                  style={getToastmasterImageStyle("right", idaVisible)}
+                >
+                  {/* <Image
+                    src="/cursors/ida-placeholder.svg"
+                    alt="Ida placeholder"
+                    width={90}
+                    height={90}
+                    style={toastmasterPortraitStyle}
+                  /> */}
+                </div>
+                <Typography
+                  variant="subtitle1"
+                  style={{
+                    display: "inline-block",
+                    width: "fit-content",
+                    fontFamily: "Didot",
+                    color: mainTextColor,
+                    fontSize: isMobile ? "24px" : "30px",
+                  }}
+                >
+                  Ida Bjarke
+                </Typography>
+                <Typography variant="body2" sx={{fontFamily: "Didot", color: mainTextColor, marginTop: "0.65rem" }}>
+                  <a style={toastmasterLinkStyle}>Ida.bjarke@gmail.com </a>
+                </Typography>
+                <Typography variant="body2" sx={{fontFamily: "Didot", color: mainTextColor, marginTop: "0.25rem" }}>
+                  <a style={toastmasterLinkStyle}>0706459549</a>
+                </Typography>
+              </div>
+            </Col>
+          </Row>
         </Col>
 
         <Col as="section" id="osa" className="py-5">
@@ -246,8 +379,7 @@ export default function Home() {
                 </Typography>
                 <Typography variant="subtitle1" style={{ fontFamily: "Didot"}}>1 maj</Typography>
                 <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor}}>
-                  Man får självklart OSA direkt till oss på valfritt sätt, eller höra av sig om man
-                  har några som helst frågor.
+                  Man får självklart OSA direkt till oss på valfritt sätt om man vill. Om man har några som helst frågor, så är det bara att höra av sig närsomhelst, antingen till oss eller till våra TMs! 
                 </Typography>
               </Col>
             </Col>

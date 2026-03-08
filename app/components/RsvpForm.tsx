@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import { Button, Col, Form } from "react-bootstrap";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box"
+import { useMediaQuery } from "@mui/material";
 
 const inputStyle = {
   border: "0px solid rgb(26 23 20 / 30%)",
@@ -20,6 +21,7 @@ export default function RsvpForm() {
   const [foodAllergies, setFoodAllergies] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   const submitRsvp = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -83,7 +85,7 @@ export default function RsvpForm() {
         <Typography style={{ fontFamily: "Didot", color: mainTextColor , marginBottom: "0.35rem" }}>
           Kan du komma?
         </Typography>
-        <Col className="d-flex flex-wrap gap-4 p-0 " style={{justifyContent: 'center'}}>
+        <Col className="d-flex flex-wrap gap-4 p-0 " style={{justifyContent: isMobile ? 'center' : 'left'}}>
       
           <Box
             sx={{
@@ -106,6 +108,7 @@ export default function RsvpForm() {
                     left: '0px',
                     width: 'calc(50%)',
                     borderRadius: '6px',
+                    borderWidth: 1,
                 backgroundColor: "#d64c63",
 
                     transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -133,6 +136,7 @@ export default function RsvpForm() {
                       px: 2,
                       py: 1,
                       fontWeight: 600,
+                      // borderWidth: 1,
                       fontSize: '0.85rem',
                       lineHeight: 1.2,
                       color:  mainTextColor,
