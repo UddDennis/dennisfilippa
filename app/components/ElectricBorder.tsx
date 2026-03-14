@@ -29,6 +29,8 @@ type ElectricBorderProps = {
   children: ReactNode;
   className?: string;
   color?: string;
+  effectDisplacement?: number;
+  effectPadding?: number;
   speed?: number;
   style?: CSSProperties;
   thickness?: number;
@@ -41,6 +43,8 @@ export default function ElectricBorder({
   children,
   className,
   color = "#5227FF",
+  effectDisplacement,
+  effectPadding,
   speed = 20,
   style,
   thickness = 1,
@@ -246,8 +250,8 @@ export default function ElectricBorder({
 
     const updateSize = () => {
       const rect = container.getBoundingClientRect();
-      borderOffset = Math.max(10, Math.min(rect.height * 0.35, 16));
-      displacement = Math.max(8, Math.min(rect.height * 0.28, 14));
+      borderOffset = effectPadding ?? Math.max(10, Math.min(rect.height * 0.35, 16));
+      displacement = effectDisplacement ?? Math.max(8, Math.min(rect.height * 0.28, 14));
 
       width = rect.width + borderOffset * 2;
       height = rect.height + borderOffset * 2;
@@ -347,7 +351,18 @@ export default function ElectricBorder({
       }
       resizeObserver.disconnect();
     };
-  }, [active, borderRadius, chaos, color, getRoundedRectPoint, octavedNoise, speed, thickness]);
+  }, [
+    active,
+    borderRadius,
+    chaos,
+    color,
+    effectDisplacement,
+    effectPadding,
+    getRoundedRectPoint,
+    octavedNoise,
+    speed,
+    thickness,
+  ]);
 
   return (
     <div
@@ -359,6 +374,8 @@ export default function ElectricBorder({
         borderRadius,
         overflow: "visible",
         isolation: "isolate",
+        contain: "paint",
+        backfaceVisibility: "hidden",
         ...style,
       }}
     >
@@ -371,6 +388,7 @@ export default function ElectricBorder({
             transform: "translate(-50%, -50%)",
             pointerEvents: "none",
             zIndex: 2,
+            backfaceVisibility: "hidden",
           }}
         >
           <canvas ref={canvasRef} style={{ display: "block" }} />

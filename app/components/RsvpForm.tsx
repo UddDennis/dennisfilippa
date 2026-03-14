@@ -121,9 +121,11 @@ export default function RsvpForm() {
                   color={electricBorderColor}
                   speed={0.5}
                   chaos={0.2}
+                  effectPadding={12}
+                  effectDisplacement={9}
                   thickness={1.2}
                   borderRadius={6}
-                  style={{ width: "100%", height: "100%", borderRadius: 2 }}
+                  style={{ width: "100%", height: "100%", borderRadius: 6 }}
                 >
                   <div
                     style={{
