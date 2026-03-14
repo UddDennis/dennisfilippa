@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="120" height="240" viewBox="0 0 120 240" fill="none">
-  <circle cx="60" cy="58" r="28" fill="#D64C63"/>
-  <rect x="32" y="92" width="56" height="104" rx="18" fill="#D64C63"/>
-  <path d="M20 112L42 128L36 144L14 128L20 112Z" fill="#D64C63"/>
-  <path d="M100 112L78 128L84 144L106 128L100 112Z" fill="#D64C63"/>
-  <text x="60" y="226" text-anchor="middle" font-family="Arial" font-size="14" fill="#381010">LEFT</text>
-</svg>

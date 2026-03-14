@@ -5,6 +5,7 @@ import { Button, Col, Form } from "react-bootstrap";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box"
 import { useMediaQuery } from "@mui/material";
+import ElectricBorder from "./ElectricBorder";
 
 const inputStyle = {
   border: "0px solid rgb(26 23 20 / 30%)",
@@ -14,6 +15,8 @@ const inputStyle = {
 };
 
 const mainTextColor = "#381010";
+const selectedFillColor = "#fa758b";
+const electricBorderColor = "#ffffe5";
 
 export default function RsvpForm() {
   const [fullName, setFullName] = useState("");
@@ -107,15 +110,31 @@ export default function RsvpForm() {
                     bottom: '0px',
                     left: '0px',
                     width: 'calc(50%)',
-                    borderRadius: '6px',
-                    borderWidth: 1,
-                backgroundColor: "#d64c63",
-
                     transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     transform: !canAttend ? 'translateX(100%)' : 'translateX(0)',
                     zIndex: 0,
+                    pointerEvents: 'none',
                 }}
-            />
+            >
+                <ElectricBorder
+                  active
+                  color={electricBorderColor}
+                  speed={0.5}
+                  chaos={0.2}
+                  thickness={1.2}
+                  borderRadius={6}
+                  style={{ width: "100%", height: "100%", borderRadius: 2 }}
+                >
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: 6,
+                      backgroundColor: selectedFillColor,
+                    }}
+                  />
+                </ElectricBorder>
+            </Box>
             
               <Box
                   key={12}

@@ -40,9 +40,15 @@ const PLAYER_HITBOX_PAD_X = 5;
 const PLAYER_HITBOX_PAD_Y = 8;
 const OBSTACLE_HITBOX_PAD_X = 8;
 const OBSTACLE_HITBOX_PAD_Y = 8;
-const PLAYER_LEFT_SPRITE_PATH = "/sprites/filippa.png";
-const PLAYER_RIGHT_SPRITE_PATH = "/sprites/dennis.png";
-const BONUS_SPRITE_PATH = "/sprites/ring.png";
+const PLAYER_LEFT_SPRITE_PATH = "/filippa.webp";
+const PLAYER_RIGHT_SPRITE_PATH = "/dennis.webp";
+const BONUS_SPRITE_PATH = "/ring.webp";
+const DANGER_SPRITE_PATHS = [
+  "/animal.webp",
+  "/banana.webp",
+  "/foot-ball.webp",
+  "/wet-floor.webp",
+];
 const BONUS_SPAWN_CHANCE = 0.18;
 
 const frameStyle: CSSProperties = {
@@ -171,6 +177,15 @@ function getDifficultyFactor(score: number) {
   return Math.min(3, 1 + score * 0.04);
 }
 
+function loadImage(src: string) {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error(`Could not load sprite: ${src}`));
+    image.src = src;
+  });
+}
+
 type Props = {
   onFinish?: (score: number) => void;
   onScore?: (score: number) => void;
@@ -178,12 +193,62 @@ type Props = {
 
 export default function WeddingChase({ onFinish, onScore }: Props = {}) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const spritesRef = useRef<{
+    playerLeft: HTMLImageElement;
+    playerRight: HTMLImageElement;
+    danger: HTMLImageElement[];
+    bonus: HTMLImageElement;
+  } | null>(null);
   const [gameState, setGameState] = useState<GameState>("idle");
+  const [isLoadingSprites, setIsLoadingSprites] = useState(true);
   const [runId, setRunId] = useState(0);
   const [score, setScore] = useState(0);
   const [message, setMessage] = useState<string | null>(null);
 
+  useEffect(() => {
+    let isCancelled = false;
+
+    const preloadSprites = async () => {
+      try {
+        const [playerLeft, playerRight, bonus, ...danger] = await Promise.all([
+          loadImage(PLAYER_LEFT_SPRITE_PATH),
+          loadImage(PLAYER_RIGHT_SPRITE_PATH),
+          loadImage(BONUS_SPRITE_PATH),
+          ...DANGER_SPRITE_PATHS.map((src) => loadImage(src)),
+        ]);
+
+        if (isCancelled) {
+          return;
+        }
+
+        spritesRef.current = {
+          playerLeft,
+          playerRight,
+          danger,
+          bonus,
+        };
+        setIsLoadingSprites(false);
+      } catch {
+        if (isCancelled) {
+          return;
+        }
+        setIsLoadingSprites(false);
+        setMessage("Kunde inte ladda spelets bilder. Ladda om sidan och prova igen.");
+      }
+    };
+
+    void preloadSprites();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
   const startGame = () => {
+    if (!spritesRef.current || isLoadingSprites) {
+      setMessage("Laddar spelets bilder...");
+      return;
+    }
     setScore(0);
     setGameState("running");
     setRunId((current) => current + 1);
@@ -205,6 +270,11 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
       return;
     }
 
+    const sprites = spritesRef.current;
+    if (!sprites) {
+      return;
+    }
+
     canvas.width = CANVAS_WIDTH;
     canvas.height = CANVAS_HEIGHT;
 
@@ -219,31 +289,14 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
     let latestScore = 0;
     let running = true;
 
-    const playerLeftSprite = new Image();
-    playerLeftSprite.src = PLAYER_LEFT_SPRITE_PATH;
-    const playerRightSprite = new Image();
-    playerRightSprite.src = PLAYER_RIGHT_SPRITE_PATH;
-    const dangerSprites = [
-      "/sprites/animal.png",
-      "/sprites/banana.png",
-      "/sprites/foot-ball.png",
-      "/sprites/wet-floor.png"
-    ].map((src) => {
-      const image = new Image();
-      image.src = src;
-      return image;
-    });
-    const bonusSprite = new Image();
-    bonusSprite.src = BONUS_SPRITE_PATH;
-
     const drawScene = (timeMs: number) => {
       ctx.fillStyle = "#faf8f4";
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
       const playerParts = getPlayerParts(player);
       const swing = Math.sin(timeMs * PLAYER_SWING_SPEED) * PLAYER_SWING_MAX_RAD;
-      drawRotatedSprite(ctx, playerLeftSprite, playerParts.left, -swing);
-      drawRotatedSprite(ctx, playerRightSprite, playerParts.right, swing);
+      drawRotatedSprite(ctx, sprites.playerLeft, playerParts.left, -swing);
+      drawRotatedSprite(ctx, sprites.playerRight, playerParts.right, swing);
 
       obstacles.forEach((obstacle) => {
         if (obstacle.sprite.complete && obstacle.sprite.naturalWidth > 0) {
@@ -316,8 +369,8 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
       const isBonus = Math.random() < BONUS_SPAWN_CHANCE;
       const difficulty = getDifficultyFactor(latestScore);
       const sprite = isBonus
-        ? bonusSprite
-        : dangerSprites[Math.floor(Math.random() * dangerSprites.length)];
+        ? sprites.bonus
+        : sprites.danger[Math.floor(Math.random() * sprites.danger.length)];
 
       obstacles.push({
         kind: isBonus ? "bonus" : "danger",
@@ -439,6 +492,7 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
             <button
               type="button"
               onClick={startGame}
+              disabled={isLoadingSprites || !spritesRef.current}
               style={{ ...buttonStyle, pointerEvents: "auto" }}
               onMouseDown={(event) => {
                 event.preventDefault();
@@ -448,7 +502,11 @@ export default function WeddingChase({ onFinish, onScore }: Props = {}) {
                 event.currentTarget.blur();
               }}
             >
-              {gameState === "over" ? "Spela igen" : "Starta spel"}
+              {isLoadingSprites
+                ? "Laddar bilder..."
+                : gameState === "over"
+                  ? "Spela igen"
+                  : "Starta spel"}
             </button>
           </div>
         ) : null}

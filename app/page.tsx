@@ -165,6 +165,7 @@ export default function Home() {
                 height={596}
                 sizes="(max-width: 600px) 300px, 420px"
                 style={{ width: "100%", height: "auto", display: "block" }}
+                priority
               />
             </div>
 
@@ -238,7 +239,7 @@ export default function Home() {
                     }}
                   >
                     <Image
-                      src="/kyrkan.svg"
+                      src="/kyrkan.webp"
                       alt="Pussbild"
                       width={788}
                       height={596}
@@ -267,7 +268,7 @@ export default function Home() {
                   <Col xs={12} sm={5} md="auto" className="order-md-1 order-2 d-flex justify-content-center justify-content-md-start" style={{ margin: isMobile ? "0 auto" : undefined ,
                       marginTop: isMobile ? "6px" : undefined,}}>
                     <Image
-                      src="/ladan.svg"
+                      src="/ladan.webp"
                       alt="Pussbild"
                       width={788}
                       height={596}
@@ -306,7 +307,7 @@ export default function Home() {
                   style={getToastmasterImageStyle("left", idaVisible)}
                 >
                   <Image
-                    src="/cursors/ida.jpg"
+                    src="/ida.webp"
                     alt="Ida placeholder"
                     width={90}
                     height={90}
@@ -339,7 +340,7 @@ export default function Home() {
                   style={getToastmasterImageStyle("right", karlVisible)}
                 >
                   <Image
-                    src="/cursors/karl-bild.jpg"
+                    src="/karl-bild.webp"
                     alt="Karl placeholder"
                     width={90}
                     height={90}
@@ -374,22 +375,26 @@ export default function Home() {
           <Typography variant="h2" style={{ fontFamily: "Didot", color: mainTextColor, fontSize: isMobile ? "44px" : "60px"}}>
                 OSA
           </Typography>
+          <Col sm={6}>
+              <Col className=" p-4 d-flex flex-column gap-3 h-100 justify-content-center">
+                {/* <Typography variant="overline" style={{ fontFamily: "Didot", color: mainTextColor}}>
+                  OSA senast
+                </Typography> */}
+                <Typography variant="subtitle1" style={{ fontFamily: "Didot"}}>Senast 1 maj</Typography>
+                <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor, textAlign: "left"}}>
+                  OSA genom att fylla i formuläret nedan eller höra av er till Dennis eller Filippa!  
+                </Typography>
+                <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor, textAlign: "left"}}>
+                  Om du har några frågor, så är det bara att höra av sig antingen till oss eller till våra TMs! 
+                </Typography>
+              </Col>
+            </Col>
 
           <Row className="g-4">
             <Col sm={6}>
               <RsvpForm />
             </Col>
-            <Col sm={6}>
-              <Col className="info-card p-4 d-flex flex-column gap-3 h-100 justify-content-center">
-                <Typography variant="overline" style={{ fontFamily: "Didot", color: mainTextColor}}>
-                  OSA senast
-                </Typography>
-                <Typography variant="subtitle1" style={{ fontFamily: "Didot"}}>1 maj</Typography>
-                <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor}}>
-                  Man får självklart OSA direkt till oss på valfritt sätt om man vill. Om man har några som helst frågor, så är det bara att höra av sig närsomhelst, antingen till oss eller till våra TMs! 
-                </Typography>
-              </Col>
-            </Col>
+            
           </Row>
         </Col>
 
