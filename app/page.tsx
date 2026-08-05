@@ -23,6 +23,17 @@ const mainTextColor = "#381010";
 
 const sectionDivider = { borderBottom: "1px solid rgb(26 23 20 / 15%)" };
 
+const dinnerSchedule = [
+  { time: "16:30", event: "Brudskål", detail: "Brudparet anländer" },
+  { time: "16:40", event: "Bröllopstårta och kaffe" },
+  { time: "18:00", event: "Middag" },
+  { time: "22:30", event: "Musik och dans", detail: "Vickning serveras under kvällen" },
+  {
+    time: "01:45",
+    event: "Abonnerad buss med stopp vid Ropsten och T-Centralen",
+  },
+];
+
 export default function Home() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const isMobileQuery = useMediaQuery("(max-width:600px)");
@@ -277,23 +288,76 @@ export default function Home() {
                     />
                   </Col>
                   <Col md="auto" className="order-md-2 order-1 ms-md-auto text-md-end">
-                    <Typography variant="subtitle1" style={{ fontFamily: "Didot" , fontSize: isMobile ? "18px" : "26px"}}>16:30</Typography>
-                    <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor , fontSize: isMobile ? "16px" : "20px"}}>
-                      Vi samlas på Långängens gård för en fördrink. Mer information kommer!
-                      {/* <Link href={"https://maps.app.goo.gl/DGM5ERgLg4qTpQJ17"}>
-                        Såhär hittar man hit
-                      </Link> */}
-                    </Typography>
-                    <Typography variant="subtitle1" style={{ fontFamily: "Didot" , fontSize: isMobile ? "18px" : "26px"}}>18:00</Typography>
-                    <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor , fontSize: isMobile ? "16px" : "20px"}}>
-                      Middag och efterföljande fest.
-                    </Typography>
+                    {dinnerSchedule.map(({ time, event, detail }) => (
+                      <div key={time} style={{ marginBottom: "1.15rem" }}>
+                        <Typography variant="subtitle1" style={{ fontFamily: "Didot" , fontSize: isMobile ? "18px" : "26px"}}>
+                          {time}
+                        </Typography>
+                        <Typography variant="body2" style={{ fontFamily: "Didot", color: mainTextColor , fontSize: isMobile ? "16px" : "20px"}}>
+                          {event}
+                        </Typography>
+                        {detail && (
+                          <Typography variant="body2" style={{ fontFamily: "Didot", color: "rgb(56 16 16 / 68%)", fontSize: isMobile ? "14px" : "16px", fontStyle: "italic" }}>
+                            {detail}
+                          </Typography>
+                        )}
+                      </div>
+                    ))}
                   </Col>
                 </Row>
               </Col>
             </Col>
             </Row>
         </Col>
+        </Col>
+
+        <Col as="section" id="hitta-hit" className="py-5 mt-4">
+          <Typography
+            variant="h2"
+            style={{
+              fontFamily: "Didot",
+              color: mainTextColor,
+              fontSize: isMobile ? "42px" : "60px",
+              lineHeight: 1.08,
+              maxWidth: "780px",
+            }}
+          >
+            Hur tar man sig till Långängens gård?
+          </Typography>
+          <Typography
+            variant="body1"
+            style={{
+              fontFamily: "Didot",
+              color: mainTextColor,
+              fontSize: isMobile ? "17px" : "20px",
+              marginTop: "1rem",
+              maxWidth: "680px",
+            }}
+          >
+            Långängens gård ligger mitt i ett naturreservat på Lidingö. Vill ni åka kollektivt går buss 201 från Ropsten till
+             Hantverkshuset, och därifrån väntar en vacker promenad på cirka 2,5 km. Man kan också ta sig dit med taxi eller genom att samåka.
+            En abonnerad buss avgår från Långängens gård kl. 01:45, med stopp vid Ropsten och T-Centralen.
+          </Typography>
+          <Row className="g-3 mt-3">
+            <Col xs="auto">
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=L%C3%A5ng%C3%A4ngens+G%C3%A5rd%2C+181+41+Liding%C3%B6"
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "inline-flex",
+                  color: mainTextColor,
+                  borderBottom: "1px solid rgb(56 16 16 / 45%)",
+                  fontFamily: "Didot",
+                  fontSize: isMobile ? "17px" : "19px",
+                  textDecoration: "none",
+                  paddingBottom: "0.15rem",
+                }}
+              >
+                Öppna i Google Maps →
+              </a>
+            </Col>
+          </Row>
         </Col>
 
         <Col as="section" id="toastmasters" className="py-5 mt-5 mb-25" style={{}}>
